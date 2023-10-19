@@ -26,12 +26,12 @@ def _open_subscription_thread(
             signals,
             on_change,  # True: only report when signal changes
             on_subscribe,
-            lambda sub: (sync.put(subscription)),
+            lambda subscription: (sync.put(subscription)),
         ),
     ).start()
     # wait for subscription to settle
-    subscription = sync.get()
-    return subscription
+    subs = sync.get()
+    return subs
 
 
 def _subscribe_list(
