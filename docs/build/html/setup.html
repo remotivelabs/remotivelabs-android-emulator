@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Setup &#8212; Remotive Labs Android Emulator 2023 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4848ba22" />
+    <link rel="stylesheet" type="text/css" href="_static/pyramid.css?v=a5b9c134" />
+    <script src="_static/documentation_options.js?v=a4664895"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Send Location to AAOS Emulator" href="send_fix.html" />
+    <link rel="prev" title="Welcome to Remotive Labs Android Emulator’s documentation!" href="index.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="send_fix.html" title="Send Location to AAOS Emulator"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Remotive Labs Android Emulator’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Remotive Labs Android Emulator 2023 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Setup</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="setup">
+<h1>Setup<a class="headerlink" href="#setup" title="Link to this heading">¶</a></h1>
+<p><strong>Make sure you have installed all dependencies with:</strong></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</pre></div>
+</div>
+<section id="emulator">
+<h2>Emulator<a class="headerlink" href="#emulator" title="Link to this heading">¶</a></h2>
+</section>
+<section id="remotive-labs-broker">
+<h2>Remotive Labs Broker<a class="headerlink" href="#remotive-labs-broker" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Go to <a class="reference external" href="https://demo.remotivelabs.com/orgs/remotidemo">Remotive Labs Broker Demo</a>.</p></li>
+<li><p>Select Start Demo.</p></li>
+<li><p>Choose a Recording Session.</p></li>
+<li><p>Select <strong>configuration_android</strong> in Broker configuration.</p></li>
+<li><p>Click on Play and go to the broker.</p></li>
+<li><dl class="simple">
+<dt>Add the desired signal visualisations:</dt><dd><ul class="simple">
+<li><p>LONGITUDE and LATITUDE for sending location fixes to the emulator.</p></li>
+<li><p>Other relevant signals for VHAL properties and/or sensors.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>Copy the url, API key, namespace, and signals from “Examples to subscribe to signals from an external application”.</p></li>
+<li><p>Use those as arguments to the scripts.</p></li>
+</ol>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Setup</a><ul>
+<li><a class="reference internal" href="#emulator">Emulator</a></li>
+<li><a class="reference internal" href="#remotive-labs-broker">Remotive Labs Broker</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+                          title="previous chapter">Welcome to Remotive Labs Android Emulator’s documentation!</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="send_fix.html"
+                          title="next chapter">Send Location to AAOS Emulator</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/setup.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="send_fix.html" title="Send Location to AAOS Emulator"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Remotive Labs Android Emulator’s documentation!"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Remotive Labs Android Emulator 2023 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Setup</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2023, Remotive Labs.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    </div>
+  </body>
+</html>
