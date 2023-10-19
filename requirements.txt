@@ -1,0 +1,8 @@
+grpc-interceptor==0.14.2
+grpcio==1.59.0
+grpcio-tools==1.59.0
+protobuf==4.24.4
+docutils==0.20.1
+remotivelabs-broker==0.1.10
+Sphinx==7.2.6
+
