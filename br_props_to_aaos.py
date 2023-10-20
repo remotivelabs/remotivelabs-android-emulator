@@ -38,6 +38,8 @@ class brokerDeviceBridge:
 
 
 if __name__ == "__main__":
-    adb_device = adb.get_device()
+    #adb_device = adb.get_device()
+    # Use the following line to communicate with emulator, and the previous one with AAOS Pixel
+    adb_device = adb.get_emulator_device()
     br_dev = brokerDeviceBridge(adb_device)
     br_dev.set_vhal_props()
