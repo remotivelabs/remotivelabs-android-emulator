@@ -4,7 +4,7 @@ This is a set of Python scripts to redirect data from Remotive Labs broker to AA
 
 ![Example](docs/source/example.gif)
 
-Check the [video](media/video_example_location_broker_to_emu.mov) in */media* for an example on how location can be sent from Remotive Labs broker
+Check the [video](media/video_example_location_broker_to_emu_720.mov) in */media* for an example on how location can be sent from Remotive Labs broker
 to AAOS emulator.
 
 ## Setup
