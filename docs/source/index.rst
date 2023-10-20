@@ -9,6 +9,9 @@ Welcome to Remotive Labs Android Emulator's documentation!
 This project aims to implement scripts that work as the bridge between a `Remotive Labs <https://remotivelabs.com/>`_
 broker and an `AAOS <https://source.android.com/docs/automotive>`_ emulator.
 
+.. image:: example.gif
+   :alt: Example gif
+   :align: center
 
 .. note::
 
