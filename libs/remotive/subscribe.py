@@ -41,7 +41,7 @@ def _subscribe_list(
         yield signal_creator.signal(signal, namespace)
 
 
-def _get_value_str(signal: br.network_api_pb2.Signal) -> str:
+def get_proper_signal_value(signal: br.network_api_pb2.Signal):
     if signal.raw != b"":
         return signal.raw
     elif signal.HasField("integer"):
@@ -58,7 +58,7 @@ def printer(signals: br.network_api_pb2.Signals) -> None:
     for signal in signals:
         print(
             "{} {} {}".format(
-                signal.id.name, signal.id.namespace.name, _get_value_str(signal)
+                signal.id.name, signal.id.namespace.name, str(get_proper_signal_value(signal))
             )
         )
 
@@ -159,5 +159,3 @@ def parsing_to_subscribe():
     signals = args.accumulated
 
     return [args.url, args.x_api_key, signals]
-
-
