@@ -1,4 +1,4 @@
-VHAL Properties (Under development)
+Modify VHAL Properties (Under development)
 ===========================================================================================
 
 In order to set properties in AAOS, the project currently uses the library provided by AOSP. It can be found in
@@ -19,8 +19,11 @@ port in the Car emulator:
         extraArgs = '' if device is None else '-s %s' % device
         adbCmd = 'adb %s forward tcp:0 tcp:%d' % (extraArgs, remotePortNumber)
 
-Userdebug build and permissive mode are mandatory
+Execute the script
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. warning::
+    Userdebug build and permissive mode are mandatory for this.
 
 In order to get it working the build **MUST BE** userdebug. Also, you need to run the emulator in permissive
 mode. If those two requirements are not satisfied, SELinux will not allow AAOS emulator to open its own socket and listen
@@ -41,6 +44,8 @@ The simplest way to execute the emulator in permissive mode is through the termi
 Refer to https://developer.android.com/studio/run/emulator-commandline if this is your first time executing this way.
 Here we are assuming that emulator is on your $PATH.
 
+The flag *-no-snapshot* triggers a cold boot to make sure that the socket communication was opened.
+
 You can see the AVDs by using:
 
 .. code-block:: console
@@ -53,6 +58,21 @@ Once you start the emulator, you can check if the socket was open from AAOS side
 
     $ adb logcat | grep SocketComm
 
+Example:
+
+.. code-block:: console
+
+    10-20 10:05:11.656 31226 31226 I VehicleEmulator_v2_0: Starting SocketComm
+    10-20 10:05:11.656 31226 31226 I SocketComm: listen: Listening for connections on port 33452
+    10-20 10:05:14.356 31226 31233 D SocketComm: accept: Incoming connection received from 127.0.0.1:63905
+
+Then, run the script with parameters from Remotive Labs broker:
+
+.. code-block:: console
+
+    $ python3 br_props_to_aaos.py --url $URL --x_api_key $KEY --signal $SIGNAL
+
+
 Issues with protobuf
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -64,7 +84,7 @@ These are options you can try to solve it:
 
 .. code-block:: console
 
-    $ PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python python3 vhal_prop_simulator.py
+    $ PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python python3 br_props_to_aaos.py --url $URL --x_api_key $KEY --signal $SIGNAL
 
 
 * Generate the protobuf file from hardware/interfaces/automotive/vehicle/2.0/default/impl/vhal_v2_0
@@ -89,5 +109,7 @@ Testing Vhal_emulator
 .. code-block:: console
 
     $ m -j EmbeddedKitchenSinkApp
+    $ adb root
+    $ adb install -r -d $ANDROID_PRODUCT_OUT/system/priv-app/EmbeddedKitchenSinkApp/EmbeddedKitchenSinkApp.apk
 
 * In the future it would be nice to test the script with an userdebug with GAS. Unfortunately, those are not provided publicly.

@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>VHAL Properties (Under development) &#8212; Remotive Labs Android Emulator 2023 documentation</title>
+    <title>Modify VHAL Properties (Under development) &#8212; Remotive Labs Android Emulator 2023 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4848ba22" />
     <link rel="stylesheet" type="text/css" href="_static/pyramid.css?v=a5b9c134" />
     <script src="_static/documentation_options.js?v=a4664895"></script>
@@ -13,6 +13,7 @@
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Insights" href="insights.html" />
     <link rel="prev" title="Send Location to AAOS Emulator" href="send_fix.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -29,10 +30,13 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
+          <a href="insights.html" title="Insights"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
           <a href="send_fix.html" title="Send Location to AAOS Emulator"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Remotive Labs Android Emulator 2023 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">VHAL Properties (Under development)</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Modify VHAL Properties (Under development)</a></li> 
       </ul>
     </div>  
 
@@ -41,8 +45,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="vhal-properties-under-development">
-<h1>VHAL Properties (Under development)<a class="headerlink" href="#vhal-properties-under-development" title="Link to this heading">¶</a></h1>
+  <section id="modify-vhal-properties-under-development">
+<h1>Modify VHAL Properties (Under development)<a class="headerlink" href="#modify-vhal-properties-under-development" title="Link to this heading">¶</a></h1>
 <p>In order to set properties in AAOS, the project currently uses the library provided by AOSP. It can be found in
 <a class="reference external" href="https://android.googlesource.com/platform/packages/services/Car/+/master/tools/emulator/vhal_emulator.py">android/platform/packages/services/Car/tools/emulator/</a></p>
 <p>That code has not been update in the latest Android versions. It creates a socket connection directly to a hard coded
@@ -57,8 +61,12 @@ port in the Car emulator:</p>
     <span class="n">adbCmd</span> <span class="o">=</span> <span class="s1">&#39;adb </span><span class="si">%s</span><span class="s1"> forward tcp:0 tcp:</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">extraArgs</span><span class="p">,</span> <span class="n">remotePortNumber</span><span class="p">)</span>
 </pre></div>
 </div>
-<section id="userdebug-build-and-permissive-mode-are-mandatory">
-<h2>Userdebug build and permissive mode are mandatory<a class="headerlink" href="#userdebug-build-and-permissive-mode-are-mandatory" title="Link to this heading">¶</a></h2>
+<section id="execute-the-script">
+<h2>Execute the script<a class="headerlink" href="#execute-the-script" title="Link to this heading">¶</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Userdebug build and permissive mode are mandatory for this.</p>
+</div>
 <p>In order to get it working the build <strong>MUST BE</strong> userdebug. Also, you need to run the emulator in permissive
 mode. If those two requirements are not satisfied, SELinux will not allow AAOS emulator to open its own socket and listen
 to any connections from your host machine.</p>
@@ -72,12 +80,23 @@ to any connections from your host machine.</p>
 </div>
 <p>Refer to <a class="reference external" href="https://developer.android.com/studio/run/emulator-commandline">https://developer.android.com/studio/run/emulator-commandline</a> if this is your first time executing this way.
 Here we are assuming that emulator is on your $PATH.</p>
+<p>The flag <em>-no-snapshot</em> triggers a cold boot to make sure that the socket communication was opened.</p>
 <p>You can see the AVDs by using:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>emulator<span class="w"> </span>-list-avds
 </pre></div>
 </div>
 <p>Once you start the emulator, you can check if the socket was open from AAOS side with:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>adb<span class="w"> </span>logcat<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>SocketComm
+</pre></div>
+</div>
+<p>Example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">10-20 10:05:11.656 31226 31226 I VehicleEmulator_v2_0: Starting SocketComm</span>
+<span class="go">10-20 10:05:11.656 31226 31226 I SocketComm: listen: Listening for connections on port 33452</span>
+<span class="go">10-20 10:05:14.356 31226 31233 D SocketComm: accept: Incoming connection received from 127.0.0.1:63905</span>
+</pre></div>
+</div>
+<p>Then, run the script with parameters from Remotive Labs broker:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3<span class="w"> </span>br_props_to_aaos.py<span class="w"> </span>--url<span class="w"> </span><span class="nv">$URL</span><span class="w"> </span>--x_api_key<span class="w"> </span><span class="nv">$KEY</span><span class="w"> </span>--signal<span class="w"> </span><span class="nv">$SIGNAL</span>
 </pre></div>
 </div>
 </section>
@@ -88,7 +107,7 @@ Here we are assuming that emulator is on your $PATH.</p>
 <ul class="simple">
 <li><p>Use <strong>PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python</strong> before calling the script:</p></li>
 </ul>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nv">PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION</span><span class="o">=</span>python<span class="w"> </span>python3<span class="w"> </span>vhal_prop_simulator.py
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nv">PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION</span><span class="o">=</span>python<span class="w"> </span>python3<span class="w"> </span>br_props_to_aaos.py<span class="w"> </span>--url<span class="w"> </span><span class="nv">$URL</span><span class="w"> </span>--x_api_key<span class="w"> </span><span class="nv">$KEY</span><span class="w"> </span>--signal<span class="w"> </span><span class="nv">$SIGNAL</span>
 </pre></div>
 </div>
 <ul class="simple">
@@ -128,6 +147,8 @@ Here we are assuming that emulator is on your $PATH.</p>
 </li>
 </ul>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>m<span class="w"> </span>-j<span class="w"> </span>EmbeddedKitchenSinkApp
+<span class="gp">$ </span>adb<span class="w"> </span>root
+<span class="gp">$ </span>adb<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>-d<span class="w"> </span><span class="nv">$ANDROID_PRODUCT_OUT</span>/system/priv-app/EmbeddedKitchenSinkApp/EmbeddedKitchenSinkApp.apk
 </pre></div>
 </div>
 <ul class="simple">
@@ -146,8 +167,8 @@ Here we are assuming that emulator is on your $PATH.</p>
   <div>
     <h3><a href="index.html">Table of Contents</a></h3>
     <ul>
-<li><a class="reference internal" href="#">VHAL Properties (Under development)</a><ul>
-<li><a class="reference internal" href="#userdebug-build-and-permissive-mode-are-mandatory">Userdebug build and permissive mode are mandatory</a></li>
+<li><a class="reference internal" href="#">Modify VHAL Properties (Under development)</a><ul>
+<li><a class="reference internal" href="#execute-the-script">Execute the script</a></li>
 <li><a class="reference internal" href="#issues-with-protobuf">Issues with protobuf</a></li>
 <li><a class="reference internal" href="#testing-vhal-emulator">Testing Vhal_emulator</a></li>
 </ul>
@@ -159,6 +180,11 @@ Here we are assuming that emulator is on your $PATH.</p>
     <h4>Previous topic</h4>
     <p class="topless"><a href="send_fix.html"
                           title="previous chapter">Send Location to AAOS Emulator</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="insights.html"
+                          title="next chapter">Insights</a></p>
   </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
@@ -188,10 +214,13 @@ Here we are assuming that emulator is on your $PATH.</p>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
+          <a href="insights.html" title="Insights"
+             >next</a> |</li>
+        <li class="right" >
           <a href="send_fix.html" title="Send Location to AAOS Emulator"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Remotive Labs Android Emulator 2023 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">VHAL Properties (Under development)</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Modify VHAL Properties (Under development)</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

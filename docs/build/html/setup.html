@@ -53,6 +53,63 @@
 </div>
 <section id="emulator">
 <h2>Emulator<a class="headerlink" href="#emulator" title="Link to this heading">¶</a></h2>
+<p>Use Android Studio Preview Version: <a class="reference external" href="https://developer.android.com/studio/preview">https://developer.android.com/studio/preview</a></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The official version from <a class="reference external" href="https://developer.android.com/studio">https://developer.android.com/studio</a> does not provide Automotive emulator images!</p>
+</div>
+<section id="download-the-images">
+<h3>Download the images<a class="headerlink" href="#download-the-images" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://developer.android.com/training/cars/testing/emulator">https://developer.android.com/training/cars/testing/emulator</a></p>
+<ol class="arabic simple">
+<li><p>In Android Studio, select Tools &gt; SDK Manager.</p></li>
+<li><p>Click the SDK Platforms tab.</p></li>
+<li><p>Click Show Package Details.</p></li>
+<li><p>Select which image(s) to download (see the preceding table for details)</p></li>
+<li><p>Click Apply, then click OK.</p></li>
+</ol>
+<p>It is recommended that you download the following images:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Android Automotive 13 “Tiramisu” with Google APIs ARM 64 v8a System Image</dt><dd><ul>
+<li><p>It does not contain GAS, but it is userdebug (for setting VHAL)</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Android Automotive 12L with Play Store ARM 64 v8a System Image</dt><dd><ul>
+<li><p>If your machine is <strong>ARM</strong> based. It is an user build with GAS.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Android Automotive 12L with Play Store Intel x86 Atom_64 System Image</dt><dd><ul>
+<li><p>If your machine is <strong>x86</strong> based. It is an user build with GAS.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="create-a-car-avd-and-run-the-emulator">
+<h3>Create a car AVD and run the emulator<a class="headerlink" href="#create-a-car-avd-and-run-the-emulator" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://developer.android.com/studio/run/managing-avds">https://developer.android.com/studio/run/managing-avds</a></p>
+<ol class="arabic simple">
+<li><p>In Android Studio, select Tools &gt; AVD Manager.</p></li>
+<li><p>Click Create Virtual Device.</p></li>
+<li><p>From the Select Hardware dialog, select Automotive, and then select a device. Click Next.</p></li>
+<li><p>Select a system image that targets Automotive, such as Android 12L (Automotive with Play Store), and click Next.</p></li>
+<li><p>Name your AVD and select any other options that you want to customize, then click Finish.</p></li>
+<li><p>From the tool window bar, select your Android Automotive OS AVD as your deployment target.</p></li>
+<li><p>Click Run icon.</p></li>
+</ol>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>For setting VHAL properties the emulator must be run in SELinux permissive mode. Go to <a class="reference internal" href="vhal_props.html"><span class="doc">VHAL</span></a>.</p>
+</div>
+</section>
 </section>
 <section id="remotive-labs-broker">
 <h2>Remotive Labs Broker<a class="headerlink" href="#remotive-labs-broker" title="Link to this heading">¶</a></h2>
@@ -87,7 +144,11 @@
     <h3><a href="index.html">Table of Contents</a></h3>
     <ul>
 <li><a class="reference internal" href="#">Setup</a><ul>
-<li><a class="reference internal" href="#emulator">Emulator</a></li>
+<li><a class="reference internal" href="#emulator">Emulator</a><ul>
+<li><a class="reference internal" href="#download-the-images">Download the images</a></li>
+<li><a class="reference internal" href="#create-a-car-avd-and-run-the-emulator">Create a car AVD and run the emulator</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#remotive-labs-broker">Remotive Labs Broker</a></li>
 </ul>
 </li>

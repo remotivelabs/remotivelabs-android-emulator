@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Insights &#8212; Remotive Labs Android Emulator 2023 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4848ba22" />
+    <link rel="stylesheet" type="text/css" href="_static/pyramid.css?v=a5b9c134" />
+    <script src="_static/documentation_options.js?v=a4664895"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Modify VHAL Properties (Under development)" href="vhal_props.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="vhal_props.html" title="Modify VHAL Properties (Under development)"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Remotive Labs Android Emulator 2023 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Insights</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="insights">
+<h1>Insights<a class="headerlink" href="#insights" title="Link to this heading">¶</a></h1>
+<p>This page covers lessons learned during the development, as well as proposes future implementations
+to the project.</p>
+<section id="consider-using-qemu">
+<h2>Consider using QEMU<a class="headerlink" href="#consider-using-qemu" title="Link to this heading">¶</a></h2>
+<p>The easiest and quickest way to manipulate VHAL properties on Android emulator is by using the
+scripts in <a class="reference external" href="https://android.googlesource.com/platform/packages/services/Car/+/refs/heads/main/tools/emulator">https://android.googlesource.com/platform/packages/services/Car/+/refs/heads/main/tools/emulator</a>.</p>
+<p>However, those scripts have not been supported for a while, so it faces several issues:</p>
+<ul class="simple">
+<li><p>AAOS images MUST be userdebug.</p></li>
+<li><p>SELinux MUST be set to permissive.</p></li>
+<li><p>Google has provided an userdebug emulator image, but it does not contain Google Automotive Services.</p></li>
+</ul>
+<p>Google implemented on the Car emulator side a socket server that only works with the conditions mentioned above.
+If those are not satisfied, SELinux disallows the process to listen to the scripts.</p>
+<p>In recent version, Google has implemented QEMU pipes as an alternative for interacting with VHAL:
+<a class="reference external" href="https://cs.android.com/android/platform/superproject/main/+/main:device/generic/car/emulator/vhal_aidl/VehicleEmulator/VehicleEmulator.cpp">https://cs.android.com/android/platform/superproject/main/+/main:device/generic/car/emulator/vhal_aidl/VehicleEmulator/VehicleEmulator.cpp</a></p>
+<p>It would be interesting to check if implementing a solution with QEMU is worthwhile.</p>
+</section>
+<section id="android-automotive-vhal-emulator-is-unreliable">
+<h2>Android Automotive VHAL Emulator is unreliable<a class="headerlink" href="#android-automotive-vhal-emulator-is-unreliable" title="Link to this heading">¶</a></h2>
+<p>Even when using the mentioned scripts, the interface on Android OS side is flaky.</p>
+<p>For instance, it is possible to monitor VHAL properties by using the KitchenSink app:</p>
+<p>/packages/services/Car/tests/EmbeddedKitchenSinkApp/
+<a class="reference external" href="https://cs.android.com/android/platform/superproject/main/+/main:packages/services/Car/tests/EmbeddedKitchenSinkApp">https://cs.android.com/android/platform/superproject/main/+/main:packages/services/Car/tests/EmbeddedKitchenSinkApp</a></p>
+<p>Still, the app crashes constantly on the emulator, even when it is built locally with the latest code.</p>
+<p>Another way for testing is using a Pixel device:
+<a class="reference external" href="https://github.com/remotivelabs/remotivelabs-android-vhal">https://github.com/remotivelabs/remotivelabs-android-vhal</a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In case you want to use a Pixel device, make sure you call adb.get_device() on br_props_to_aaos.py.</p>
+</div>
+<p>That method seemed unreliable as well, as the app also stops responding sometimes, and from AAOS logs
+VHAL may die during the tests.</p>
+<p>All the mentioned points considered, it is necessary to work on stabilisation and defining of an
+interface in the emulator images side. As of now, documentation from Android side is missing, and
+there is no established way for testing this scenario.</p>
+<p>Virtualization can be of great benefit to the Android Automotive OS development, but it is necessary
+to find a common ground between OEMs, Google and Remotive Labs.</p>
+<p>In summary, define a proper set of methods to exchange data to AAOS emulator, and validate the properties.</p>
+</section>
+<section id="expand-remotive-labs-broker-android-data">
+<h2>Expand Remotive Labs Broker Android Data<a class="headerlink" href="#expand-remotive-labs-broker-android-data" title="Link to this heading">¶</a></h2>
+<p>It is possible to set sensors data. Check <span class="xref std std-ref">sensors</span> out.</p>
+<p>In the future, the broker should provide relevant sensor data to be routed to the emulator.</p>
+<p>Also, VHAL properties have its own vehicle area
+<a class="reference external" href="https://cs.android.com/android/platform/superproject/main/+/main:hardware/interfaces/automotive/vehicle/aidl_property/android/hardware/automotive/vehicle/VehicleArea.aidl;l=25?q=vehiclearea&amp;sq=&amp;ss=android%2Fplatform%2Fsuperproject%2Fmain">https://cs.android.com/android/platform/superproject/main/+/main:hardware/interfaces/automotive/vehicle/aidl_property/android/hardware/automotive/vehicle/VehicleArea.aidl;l=25?q=vehiclearea&amp;sq=&amp;ss=android%2Fplatform%2Fsuperproject%2Fmain</a></p>
+<p>The scripts in the project are using VehicleArea.GLOBAL, since there are no signals with different areas
+for Android yet. In the future, this should be changed accordingly. Refer to <a class="reference external" href="https://source.android.com/docs/automotive/vhal/special-properties#hvac">https://source.android.com/docs/automotive/vhal/special-properties#hvac</a>
+about a more detailed explanation.</p>
+</section>
+<section id="test-on-android-userdebug-builds-with-gas">
+<h2>Test on Android userdebug builds with GAS<a class="headerlink" href="#test-on-android-userdebug-builds-with-gas" title="Link to this heading">¶</a></h2>
+<p>As mentioned, the only userdebug emulator image available now does not contain GAS.
+For a more user-like testing, it would be nice to set VHAL properties by using Google Maps, for example.</p>
+<p>OEMs have access to those builds since they apply for Google’s AOSP certification.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Insights</a><ul>
+<li><a class="reference internal" href="#consider-using-qemu">Consider using QEMU</a></li>
+<li><a class="reference internal" href="#android-automotive-vhal-emulator-is-unreliable">Android Automotive VHAL Emulator is unreliable</a></li>
+<li><a class="reference internal" href="#expand-remotive-labs-broker-android-data">Expand Remotive Labs Broker Android Data</a></li>
+<li><a class="reference internal" href="#test-on-android-userdebug-builds-with-gas">Test on Android userdebug builds with GAS</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="vhal_props.html"
+                          title="previous chapter">Modify VHAL Properties (Under development)</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/insights.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="vhal_props.html" title="Modify VHAL Properties (Under development)"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Remotive Labs Android Emulator 2023 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Insights</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2023, Remotive Labs.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    </div>
+  </body>
+</html>

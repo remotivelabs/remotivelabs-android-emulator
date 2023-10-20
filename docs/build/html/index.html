@@ -50,8 +50,48 @@ broker and an <a class="reference external" href="https://source.android.com/doc
 <p>There are some important steps regarding the setup before running the script.
 Please make sure to check the setup page beforehand!</p>
 </div>
-<section id="indices-and-tables">
-<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Link to this heading">¶</a></h2>
+<section id="pages">
+<h2>Pages<a class="headerlink" href="#pages" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>Setup</strong></dt><dd><ul>
+<li><p>Describes the essential requirements for executing the scripts in this project.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Send Location to AAOS Emulator</strong></dt><dd><ul>
+<li><p>How to use a script that redirects longitude and latitude from a broker to an emulator.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Modify VHAL Properties</strong></dt><dd><ul>
+<li><p>Explains how VHAL properties can be modified in AAOS, and how to execute a script for that purpose.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Insights</strong></dt><dd><ul>
+<li><p>Compilation of lessons learned and potential implementations/improvements on the project.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Send Sensors Data to AAOS Emulator</strong></dt><dd><ul>
+<li><p>Describe how sensors data can be set and get from emulators.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="table-of-contents">
+<h2>Table of contents<a class="headerlink" href="#table-of-contents" title="Link to this heading">¶</a></h2>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
@@ -65,12 +105,20 @@ Please make sure to check the setup page beforehand!</p>
 <li class="toctree-l2"><a class="reference internal" href="send_fix.html#check-the-location-changing">Check the location changing</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="vhal_props.html">VHAL Properties (Under development)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="vhal_props.html#userdebug-build-and-permissive-mode-are-mandatory">Userdebug build and permissive mode are mandatory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vhal_props.html">Modify VHAL Properties (Under development)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vhal_props.html#execute-the-script">Execute the script</a></li>
 <li class="toctree-l2"><a class="reference internal" href="vhal_props.html#issues-with-protobuf">Issues with protobuf</a></li>
 <li class="toctree-l2"><a class="reference internal" href="vhal_props.html#testing-vhal-emulator">Testing Vhal_emulator</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="insights.html">Insights</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="insights.html#consider-using-qemu">Consider using QEMU</a></li>
+<li class="toctree-l2"><a class="reference internal" href="insights.html#android-automotive-vhal-emulator-is-unreliable">Android Automotive VHAL Emulator is unreliable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="insights.html#expand-remotive-labs-broker-android-data">Expand Remotive Labs Broker Android Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="insights.html#test-on-android-userdebug-builds-with-gas">Test on Android userdebug builds with GAS</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sensors.html">Send Sensors Data to AAOS Emulator</a></li>
 </ul>
 </div>
 </section>
@@ -87,7 +135,8 @@ Please make sure to check the setup page beforehand!</p>
     <h3><a href="#">Table of Contents</a></h3>
     <ul>
 <li><a class="reference internal" href="#">Welcome to Remotive Labs Android Emulator’s documentation!</a><ul>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+<li><a class="reference internal" href="#pages">Pages</a></li>
+<li><a class="reference internal" href="#table-of-contents">Table of contents</a></li>
 </ul>
 </li>
 </ul>
