@@ -1,13 +1,8 @@
-import os
-import sys
 import libs.adb.device as adb
 import libs.vhal_emulator.vhal_emulator as vhal_emu
 from libs.vhal_emulator.vhal_prop_consts_2_0 import vhal_props, vhal_vehicle_area
 from libs.remotive.subscribe import parsing_to_subscribe, subscribe, get_proper_signal_value
 from inspect import getmembers
-
-# Add /libs to PATH so they are loaded automatically
-sys.path.append(os.path.join(os.path.dirname(__file__), "libs"))
 
 
 class brokerDeviceBridge:
@@ -38,7 +33,7 @@ class brokerDeviceBridge:
 
 
 if __name__ == "__main__":
-    #adb_device = adb.get_device()
+    # adb_device = adb.get_device()
     # Use the following line to communicate with emulator, and the previous one with AAOS Pixel
     adb_device = adb.get_emulator_device()
     br_dev = brokerDeviceBridge(adb_device)

@@ -60,12 +60,13 @@ import sys
 import socket
 import struct
 import subprocess
-import vhal_prop_consts_2_0 as vhal_props
+import libs.vhal_emulator.vhal_prop_consts_2_0 as vhal_props
+
 # Generate the protobuf file from hardware/interfaces/automotive/vehicle/2.0/default/impl/vhal_v2_0
 # It is recommended to use the protoc provided in: prebuilts/tools/common/m2/repository/com/google/protobuf/protoc/3.0.0
 # or a later version, in order to provide Python 3 compatibility
 #   protoc -I=proto --python_out=proto proto/VehicleHalProto.proto
-import VehicleHalProto_pb2
+import libs.vhal_emulator.VehicleHalProto_pb2 as VehicleHalProto_pb2
 
 sys.dont_write_bytecode = True
 
