@@ -28,7 +28,7 @@ class brokerToEmu:
 
     def update_emu_location(self):
         args_url, args_api_key, signals = parsing_to_subscribe()
-        subscribe(args_url, args_api_key, signals, on_subscribe=self.redirect_location_to_emulator, on_change=True)
+        subscribe(args_url, args_api_key, signals, on_subscribe=self.redirect_location_to_emulator, on_change=False)
 
 
 if __name__ == "__main__":
