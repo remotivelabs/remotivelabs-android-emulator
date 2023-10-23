@@ -24,7 +24,7 @@ https://developer.android.com/studio/preview
 
 ## Run
 
-Open up a session on [Remotive Labs Broker](https://demo.remotivelabs.com/).
+Open up a session on [Remotive Labs Broker](https://demo.remotivelabs.com/). Start the playback, make sure to pick `configuration_android`.
 
 ### Send Location
 
@@ -38,7 +38,7 @@ For sending location, you can use an user image such as:
 
 Include the credentials from the broker as well as the LATITUDE and LONGITUDE signals:
 ```bash
-$ python3 br_location_to_emu.py --url $URL --x_api_key $KEY --signal LATITUDE --signal LONGITUDE
+$ python3 br_location_to_emu.py --url $URL --x_api_key $KEY --namespace android --signal LATITUDE --signal LONGITUDE
 ```
 
 ### Set VHAL Properties
