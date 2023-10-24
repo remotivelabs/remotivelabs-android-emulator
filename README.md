@@ -56,6 +56,10 @@ If you want to send VHAL property values to AAOS emulator:
 ```bash
 $ python3 br_props_to_aaos.py --namespace android --url $URL --x_api_key $KEY --signal $SIGNAL
 ```
+alternatively
+```bash
+$ PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python python3 br_props_to_aaos.py --url $URL --x_api_key $KEY --signal $SIGNAL
+```
 Send the signals you want by always putting the flag *--signal* alongside its name.
 
 ## Documentation
