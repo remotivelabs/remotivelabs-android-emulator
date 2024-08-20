@@ -1,10 +1,10 @@
-# Remotive Labs and Android Emulator
+# RemotiveLabs and Android Emulator
 
-This is a set of Python scripts to redirect data from Remotive Labs broker to AAOS emulator.
+This is a set of Python scripts to redirect data from [RemotiveCloud](https://cloud.remotivelabs.com/) to AAOS emulator.
 
 ![Example](docs/source/example.gif)
 
-Check the [video](media/video_example_location_broker_to_emu_720.mov) in */media* for an example on how location can be sent from Remotive Labs broker
+Check the [video](media/video_example_location_broker_to_emu_720.mov) in */media* for an example on how location can be sent from [RemotiveCloud](https://cloud.remotivelabs.com/)
 to AAOS emulator.
 
 ## Setup
@@ -24,7 +24,8 @@ https://developer.android.com/studio/preview
 
 ## Run
 
-Open up a session on [Remotive Labs Broker](https://demo.remotivelabs.com/). Start the playback, make sure to pick `configuration_android`.
+Create a free [RemotiveCloud](https://cloud.remotivelabs.com/) account and go to the Recordings page. Choose the _City drive to Turning Torso_ recording and start the playback. Make sure to pick _configuration_android_ when playing. 
+**Note!** If you already have an account, you can import the _City drive to Turning Torso_ recording by clicking the import icon in the upper right corner of the recording page. 
 
 ### Send Location
 
@@ -36,10 +37,11 @@ For sending location, you can use an user image such as:
     * If your machine is **x86** based. It is an user build with GAS.
 
 
-Include the credentials from the broker as well as the LATITUDE and LONGITUDE signals:
+Include the credentials from the broker (URL and API key) as well as the LATITUDE and LONGITUDE signals:
 ```bash
 $ python3 br_location_to_emu.py --url $URL --x_api_key $KEY --namespace android --signal LATITUDE --signal LONGITUDE
 ```
+**Note!** You can find the broker credentials in the bottom left corner once you have prepared the recording for playback.
 
 ### Set VHAL Properties
 To manipulate VHAL properties, you must use an userdebug build:
