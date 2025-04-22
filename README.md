@@ -79,8 +79,12 @@ In this setup you can get Android running in a containerized environment
 
 Check the [video](media/video_esample_location_broket_to_cuttlefish.mov) in */media* for an example on how location can be sent from [RemotiveCloud](https://cloud.remotivelabs.com/)
 
-Setup your cuttlefish deployment
-Navigate to your cuttlefish deployment eg https://localhost:8443/
+### Setup your cuttlefish deployment
+
+- Follow this guide: https://source.android.com/docs/devices/cuttlefish/get-started
+- Navigate to your cuttlefish deployment eg https://localhost:8443/
+
+In the screenshots `https://organicmaps.app/` is used, download the apk and install it by doing `adb install app.organicmaps_25030207.apk`
 
 ## Start playback of you desired stream
 
@@ -103,3 +107,7 @@ If you are deploying in cloud this port config might be handy. It enables `WebRT
 ```
 ssh -i ~/.ssh/google_compute_engine aleksandar_remotivelabs_com@34.34.135.209 -L 8443:localhost:8443 -L 5555:localhost:5555 -L 15550:localhost:15550 -L 15551:localhost:15551 -L 15552:localhost:15552 -L 15553:localhost:15553 -L 15554:localhost:15554 -L 15555:localhost:15555 -L 15556:localhost:15556 -L 15557:localhost:15557 -L 15558:localhost:15558 -L 15559:localhost:15559 -L 5037:localhost:5037 -L 1443:localhost:1443
 ```
+
+The coordinates are sent using `rest` to the Cuttlefish virtual Android device, more information can be found here: https://source.android.com/docs/devices/cuttlefish/control-environment. 
+
+Protos for location can be found here: https://android.googlesource.com/device/google/cuttlefish/+/refs/heads/master/host/commands/gnss_grpc_proxy/gnss_grpc_proxy.proto
