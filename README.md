@@ -70,3 +70,20 @@ your environment, emulator and scripts.
 
 There is also a section about lessons learned and improvements for this project (docs/build/html/insights.html).
 
+# RemotiveLabs and Cuttlefish virtual Android devices
+In this setup you can get Android running in a containerized environment
+
+## Start playback of you desired stream
+
+> Below hints are copied from the graphical playback interface.
+```
+remotive cloud auth login
+remotive cloud recordings mount 13303517729834103000 --transformation-name 'configuration_android'  --project aleks-base-on-open
+remotive cloud recordings seek 13303517729834103000 --seconds 60 --project aleks-base-on-open
+remotive cloud recordings play 13303517729834103000 --project aleks-base-on-open
+```
+
+# Subscribe to the cloud stream and send the location to Cuttlefish virtual Android device (cvd-1)
+```
+$ python3 br_location_to_emu.py --url $URL --x_api_key $KEY --namespace android --signal LATITUDE --signal LONGITUDE --cvd_url https://localhost:1443/devices/cvd-1
+```

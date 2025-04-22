@@ -6,7 +6,7 @@ class brokerToEmu:
     def __init__(self, adb_dev):
         # Get emulator via adb only once
         self.adb_dev = adb_dev
-        self.args_url, self.args_api_key, self.signals = parsing_to_subscribe()
+        self.args_url, self.args_api_key, _cvd, self.signals = parsing_to_subscribe()
         self.signal_name_latitude = self.signals[0][1]
         self.signal_name_longitude = self.signals[1][1]
         self.lon = None

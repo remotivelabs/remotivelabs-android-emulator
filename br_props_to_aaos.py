@@ -28,7 +28,7 @@ class brokerDeviceBridge:
                     self.vhal.set_property(signal.id.name, vhal_vehicle_area.GLOBAL, signal_val)
 
     def set_vhal_props(self):
-        args_url, args_api_key, signals = parsing_to_subscribe()
+        args_url, args_api_key, _cvd, signals = parsing_to_subscribe()
         subscribe(args_url, args_api_key, signals, on_subscribe=self.redirect_vhal_props_to_device, on_change=False)
 
 

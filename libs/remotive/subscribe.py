@@ -152,10 +152,19 @@ def parsing_to_subscribe():
         default=[],
     )
 
+    parser.add_argument(
+        "-cvd_url",
+        "--cuttlefish_url",
+        help="Cuttlefish virtual Android device url, eg https://localhost:1443/devices/cvd-1",
+        required=False,
+        type=str,
+        default="http://please_provide_cuttlefish_url",
+    )
+
     try:
         args = parser.parse_args()
     except Exception as e:
         return print("Error specifying signals to use:", e)
     signals = args.accumulated
 
-    return [args.url, args.x_api_key, signals]
+    return [args.url, args.x_api_key, args.cuttlefish_url, signals]

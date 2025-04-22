@@ -4,9 +4,8 @@ from libs.remotive.subscribe import parsing_to_subscribe, subscribe
 
 
 class BrokerToRest:
-    def __init__(self, rest_url):
-        self.rest_url = rest_url
-        self.args_url, self.args_api_key, self.signals = parsing_to_subscribe()
+    def __init__(self):
+        self.args_url, self.args_api_key, self.rest_url, self.signals = parsing_to_subscribe()
         self.signal_name_latitude = self.signals[0][1]
         self.signal_name_longitude = self.signals[1][1]
         self.lat = None
@@ -29,7 +28,7 @@ class BrokerToRest:
 
         try:
             response = requests.post(
-                self.rest_url,
+                self.rest_url + "/services/GnssGrpcProxy/SendGpsVector",
                 headers=headers,
                 data=json.dumps(payload),
                 verify=False,  # Only use this in dev/testing
@@ -67,5 +66,5 @@ class BrokerToRest:
 
 if __name__ == "__main__":
     rest_endpoint = "https://localhost:1443/devices/cvd-1/services/GnssGrpcProxy/SendGpsVector"
-    broker = BrokerToRest(rest_endpoint)
+    broker = BrokerToRest()
     broker.update_location()
