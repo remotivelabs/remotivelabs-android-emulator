@@ -65,6 +65,5 @@ class BrokerToRest:
 
 
 if __name__ == "__main__":
-    rest_endpoint = "https://localhost:1443/devices/cvd-1/services/GnssGrpcProxy/SendGpsVector"
     broker = BrokerToRest()
     broker.update_location()
