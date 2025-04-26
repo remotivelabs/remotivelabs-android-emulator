@@ -1,0 +1,46 @@
+[
+  {
+    "namespace": "Vehicle",
+    "signal": "VehicleSpeed",
+    "propertyId": "0x11600207",
+    "valueType": "FLOAT"
+  },
+  {
+    "namespace": "Powertrain",
+    "signal": "EngineRPM",
+    "propertyId": "0x11600305",
+    "valueType": "FLOAT"
+  },
+  {
+    "namespace": "Vehicle",
+    "signal": "FuelLevel",
+    "propertyId": "0x11600307",
+    "valueType": "FLOAT"
+  },
+  {
+    "namespace": "Transmission",
+    "signal": "GearPosition",
+    "propertyId": "0x11400400",
+    "valueType": "INT32",
+    "areaId": "0x1000000"
+  },
+  {
+    "namespace": "Chassis",
+    "signal": "BrakePedal",
+    "propertyId": "0x11200402",
+    "valueType": "BOOLEAN"
+  },
+  {
+    "namespace": "Body",
+    "signal": "DoorState",
+    "propertyId": "0x16400b00",
+    "valueType": "INT32",
+    "areaId": "0x6000000"
+  },
+  {
+    "namespace": "Custom",
+    "signal": "CustomSignal1",
+    "propertyId": 287454215,
+    "valueType": 6291456
+  }
+] 

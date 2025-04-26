@@ -1,0 +1,18 @@
+flowchart TD
+    A[RemotiveCloud Data Stream gRPC] --> B1[Local gRPC client<br/>VHAL properties via ADB]
+    A --> B2[Local gRPC client<br/>Forward CAN frames to local VCAN device]
+
+    B1 --> C[VHAL in AAOS Emulator]
+    B2 --> D[OEM CAN Parser Layer - AAOS reads from VCAN]
+    D --> C
+
+    C --> E[Android CarPropertyManager Apps UI]
+
+    style A stroke:#FFF,stroke-width:4px
+    style B1 stroke:#0F0,stroke-width:2px
+    style B2 stroke:#00F,stroke-width:2px
+    style C stroke:#FFF,stroke-width:2px
+    style D stroke:#00F,stroke-width:2px
+    style ADB stroke:#0F0,stroke-width:2px
+    style CAN stroke:#00F,stroke-width:2px
+    style E stroke:#FFF,stroke-width:2px
