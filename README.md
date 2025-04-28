@@ -75,7 +75,7 @@ In this setup you can get Android running in a containerized environment
 
 ## Setup cuttlefish
 
-![Example](media/cuttlefish.png)
+![Example](media/video_example_location_broket_to_cuttlefish.gif)
 
 Check the [video](media/video_example_location_broket_to_cuttlefish.mov) in */media* for an example on how location can be sent from [RemotiveCloud](https://cloud.remotivelabs.com/)
 
