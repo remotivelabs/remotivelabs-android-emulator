@@ -107,6 +107,8 @@ class Vhal:
         # Serialize the protobuf into a string
         msgStr = cmd.SerializeToString()
         msgLen = len(msgStr)
+        # Debug print: print the protobuf message as hex
+        print("Serialized protobuf bytes:", msgStr)
         # Convert the message length into int32 byte array
         msgHdr = struct.pack('!I', msgLen)
         # Send the message length first
@@ -217,17 +219,17 @@ class Vhal:
             raise ValueError('propId is invalid:', prop)
 
         propValue.value_type = valType
-        if valType in self._types.TYPE_STRING:
+        if valType == self._types.TYPE_STRING:
             propValue.string_value = value
-        elif valType in self._types.TYPE_BYTES:
+        elif valType == self._types.TYPE_BYTES:
             propValue.bytes_value = value
-        elif valType in self._types.TYPE_INT32:
+        elif valType == self._types.TYPE_INT32:
             propValue.int32_values.append(value)
-        elif valType in self._types.TYPE_INT64:
+        elif valType == self._types.TYPE_INT64:
             propValue.int64_values.append(value)
-        elif valType in self._types.TYPE_FLOAT:
+        elif valType == self._types.TYPE_FLOAT:
             propValue.float_values.append(value)
-        elif valType in self._types.TYPE_MIXED:
+        elif valType == self._types.TYPE_MIXED:
             propValue.string_value = \
                 get_by_attribute_or_key(value, 'string_value', '')
             propValue.bytes_value = \
@@ -255,3 +257,4 @@ class Vhal:
         # Parse the list of configs to generate a dictionary of prop_id to type
         for cfg in msg.config:
             self._propToType[cfg.prop] = cfg.value_type
+
