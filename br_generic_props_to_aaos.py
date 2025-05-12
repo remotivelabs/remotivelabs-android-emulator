@@ -15,7 +15,7 @@ class BrokerToAAOS:
         # Get the emulator device via adb only once
         self.adb_dev = adb_dev
         self.vhal = vhal_emu.Vhal()
-        self.signals_map = {}  # Map of signal names to property IDs and types
+        self.signals_map = {}  # Map of signal names to list of property mappings
         self.signals_to_subscribe = []  # List of (namespace, signal) tuples to subscribe to
         
     def add_signal_mapping(self, signal_name, property_id, area_id=vhal_vehicle_area.GLOBAL, value_type=None, namespace=None):
@@ -23,7 +23,8 @@ class BrokerToAAOS:
         if value_type is None:
             value_type = self.determine_value_type(property_id)
             
-        self.signals_map[signal_name] = {
+        # Create new mapping
+        mapping = {
             'property_id': property_id,
             'area_id': area_id,
             'value_type': value_type,
@@ -33,13 +34,20 @@ class BrokerToAAOS:
         # Add the property to VHAL's property map
         self.vhal._propToType[property_id] = value_type
         
+        # Initialize list for this signal if it doesn't exist
+        if signal_name not in self.signals_map:
+            self.signals_map[signal_name] = []
+            
+        # Add the mapping to the list
+        self.signals_map[signal_name].append(mapping)
+        
         # If namespace is provided, add this signal to the subscription list
         if namespace:
             if (namespace, signal_name) not in self.signals_to_subscribe:
                 self.signals_to_subscribe.append((namespace, signal_name))
                 print(f"Added subscription: {namespace}/{signal_name}")
         
-        print(f"Added mapping: {signal_name} -> Property ID: 0x{property_id:08x}, Type: 0x{value_type:08x}")
+        print(f"Added mapping: {signal_name} -> Property ID: 0x{property_id:08x}, Area ID: 0x{area_id:08x}, Type: 0x{value_type:08x}")
     
     def determine_value_type(self, property_id):
         """Try to determine the value type from the property ID"""
@@ -85,25 +93,24 @@ class BrokerToAAOS:
             
             print(f"{signal_name} {signal.id.namespace.name} {signal_val}")
             
-            # Check if we have a mapping for this signal
+            # Check if we have mappings for this signal
             if signal_name in self.signals_map:
-                mapping = self.signals_map[signal_name]
-                property_id = mapping['property_id']
-                area_id = mapping['area_id']
-                value_type = mapping['value_type']
-                
-                # Convert the value to the appropriate type
-                converted_value = self.convert_value(signal_val, value_type)
-                
-                print(f"Forwarding signal to AAOS as property ID: 0x{property_id:08x}, value: {converted_value}")
-                
-                # Set the property in AAOS
-                try:
-                    self.vhal.set_property(property_id, area_id, converted_value)
-                    #reply = self.vhal.rx_msg()
-                    #print(f"Response from AAOS: {reply}")
-                except Exception as e:
-                    print(f"Error setting property: {e}")
+                # Process all mappings for this signal
+                for mapping in self.signals_map[signal_name]:
+                    property_id = mapping['property_id']
+                    area_id = mapping['area_id']
+                    value_type = mapping['value_type']
+                    
+                    # Convert the value to the appropriate type
+                    converted_value = self.convert_value(signal_val, value_type)
+                    
+                    print(f"Forwarding signal to AAOS as property ID: 0x{property_id:08x}, Area ID: 0x{area_id:08x}, value: {converted_value}")
+                    
+                    # Set the property in AAOS
+                    try:
+                        self.vhal.set_property(property_id, area_id, converted_value)
+                    except Exception as e:
+                        print(f"Error setting property: {e}")
             else:
                 print(f"No mapping found for signal: {signal_name}")
     
