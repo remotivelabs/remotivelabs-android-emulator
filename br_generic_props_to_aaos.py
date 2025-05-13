@@ -18,6 +18,11 @@ class BrokerToAAOS:
         self.signals_map = {}  # Map of signal names to list of property mappings
         self.signals_to_subscribe = []  # List of (namespace, signal) tuples to subscribe to
         
+        # Location tracking variables
+        self.lat = None
+        self.lon = None
+        self.location_signals = None  # Will store (namespace, signal) tuples for location
+
     def add_signal_mapping(self, signal_name, property_id, area_id=vhal_vehicle_area.GLOBAL, value_type=None, namespace=None):
         """Add a mapping from signal name to VHAL property ID"""
         if value_type is None:
@@ -93,7 +98,23 @@ class BrokerToAAOS:
             
             print(f"{signal_name} {signal.id.namespace.name} {signal_val}")
             
-            # Check if we have mappings for this signal
+            # Handle location signals if enabled
+            if self.location_signals:
+                if signal_name == self.location_signals[0][1]:  # Latitude
+                    self.lat = float(signal_val)
+                elif signal_name == self.location_signals[1][1]:  # Longitude
+                    self.lon = float(signal_val)
+                
+                # Update location when both values are available
+                if self.lat is not None and self.lon is not None:
+                    try:
+                        self.adb_dev.root()
+                        self.adb_dev.send_fix(str(self.lon), str(self.lat))
+                        print(f"Updated emulator location: {self.lon}, {self.lat}")
+                    except Exception as e:
+                        print(f"Error updating location: {e}")
+            
+            # Handle property mappings
             if signal_name in self.signals_map:
                 # Process all mappings for this signal
                 for mapping in self.signals_map[signal_name]:
@@ -111,7 +132,8 @@ class BrokerToAAOS:
                         self.vhal.set_property(property_id, area_id, converted_value)
                     except Exception as e:
                         print(f"Error setting property: {e}")
-            else:
+            # Only print "No mapping found" if the signal isn't a location signal
+            elif not self.location_signals or signal_name not in [s[1] for s in self.location_signals]:
                 print(f"No mapping found for signal: {signal_name}")
     
     def load_mappings_from_json(self, json_file):
@@ -229,12 +251,46 @@ class BrokerToAAOS:
             print(f"Error starting signal forwarding: {e}")
             sys.exit(1)
 
+    def setup_location_tracking(self, location_mapping_file):
+        """Setup location signal tracking from mapping file"""
+        try:
+            with open(location_mapping_file, 'r') as f:
+                location_data = json.load(f)
+            
+            # Extract latitude and longitude signal mappings
+            if 'latitude' not in location_data or 'longitude' not in location_data:
+                print("Error: Location mapping file must contain 'latitude' and 'longitude' keys")
+                return False
+                
+            lat_signal = location_data['latitude']['signal']
+            lon_signal = location_data['longitude']['signal']
+            lat_namespace = location_data['latitude']['namespace']
+            lon_namespace = location_data['longitude']['namespace']
+            
+            self.location_signals = [
+                (lat_namespace, lat_signal),
+                (lon_namespace, lon_signal)
+            ]
+            
+            # Add location signals to subscription list
+            self.signals_to_subscribe.extend(self.location_signals)
+            print(f"Added location tracking for signals: {lat_signal}, {lon_signal}")
+            return True
+            
+        except json.JSONDecodeError as e:
+            print(f"Error parsing location mapping file: {e}")
+            return False
+        except Exception as e:
+            print(f"Error loading location mapping file: {e}")
+            return False
+
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Forward signals from broker to Android Automotive OS via VHAL')
     parser.add_argument('--mappings-file', type=str, required=True, help='JSON file containing signal to property mappings (array of objects format)')
     parser.add_argument('--broker-url', type=str, help='URL of the RemotiveBroker (default: http://127.0.0.1:50051)')
     parser.add_argument('--api-key', type=str, help='API key for broker access (default: "offline")')
+    parser.add_argument('--with-location', type=str, help='Enable location forwarding using specified mapping file')
     
     return parser.parse_args()
 
@@ -248,6 +304,11 @@ def main():
         print(f"Error: Mappings file not found: {args.mappings_file}")
         sys.exit(1)
     
+    # Check for location mapping file if --with-location is specified
+    if args.with_location and not os.path.exists(args.with_location):
+        print(f"Error: Location mapping file not found: {args.with_location}")
+        sys.exit(1)
+    
     # Get emulator device
     try:
         adb_device = adb.get_emulator_device()
@@ -258,6 +319,12 @@ def main():
     
     # Create broker to AAOS bridge
     broker_aaos = BrokerToAAOS(adb_device)
+    
+    # Setup location tracking if enabled
+    if args.with_location:
+        if not broker_aaos.setup_location_tracking(args.with_location):
+            print("Error setting up location tracking. Exiting.")
+            sys.exit(1)
     
     # Load mappings from JSON file
     if not broker_aaos.load_mappings_from_json(args.mappings_file):
