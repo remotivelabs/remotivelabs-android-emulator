@@ -1,0 +1,10 @@
+{
+    "longitude": {
+        "signal": "LONGITUDE",
+        "namespace": "android"
+    },
+    "latitude": {
+        "signal": "LATITUDE",
+        "namespace": "android"
+    }
+}

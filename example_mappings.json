@@ -1,0 +1,51 @@
+[
+    {
+        "signal": "PERF_VEHICLE_SPEED",
+        "namespace": "android",
+        "propertyId": 291504647,
+        "areaId": 0,
+        "valueType": "float"
+    },
+    {
+       "signal": "CURRENT_GEAR",
+       "namespace": "android", 
+       "propertyId": 289408000,
+       "areaId": 0,
+       "valueType": "int32"
+    },
+    {
+        "signal": "ENGINE_RPM",
+        "namespace": "android",
+        "propertyId": 291504901,
+        "areaId": 0,
+        "valueType": "float"
+    },
+    {
+        "signal": "FUEL_LEVEL",
+        "namespace": "android",
+        "propertyId": 291504903,
+        "areaId": 0,
+        "valueType": "float"
+    },
+    {
+        "signal": "RANGE_REMAINING",
+        "namespace": "android",
+        "propertyId": 291504904,
+        "areaId": 0,
+        "valueType": "float"
+    },
+    {
+        "signal": "HVAC_TEMPERATURE_SET",
+        "namespace": "android",
+        "propertyId": 358614275,
+        "areaId": 49,
+        "valueType": "float"
+    },
+    {
+        "signal": "HVAC_TEMPERATURE_SET",
+        "namespace": "android",
+        "propertyId": 358614275,
+        "areaId": 68,
+        "valueType": "float"
+    }
+]
