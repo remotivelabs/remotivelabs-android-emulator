@@ -29,7 +29,7 @@ class brokerToEmu:
                 self.adb_dev.send_fix(str(self.lon), str(self.lat))
 
     def update_emu_location(self):
-        subscribe(self.args_url, self.args_api_key, self.signals, on_subscribe=self.redirect_location_to_emulator, on_change=False)
+        subscribe(self.args_url, self.args_api_key, self.signals, on_subscribe=self.redirect_location_to_emulator, on_change=True)
 
 
 if __name__ == "__main__":
