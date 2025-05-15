@@ -47,5 +47,26 @@
         "propertyId": 358614275,
         "areaId": 68,
         "valueType": "float"
+    },
+    {
+        "signal": "PARKING_BRAKE",
+        "namespace": "android",
+        "propertyId": 287310850,
+        "areaId": 0,
+        "valueType": "float"
+    },
+    {
+        "signal": "TRACTION_CONTROL_ACTIVE",
+        "namespace": "android",
+        "propertyId": 287310859,
+        "areaId": 0,
+        "valueType": "float"
+    },
+    {
+        "signal": "ENV_OUTSIDE_TEMPERATURE",
+        "namespace": "android",
+        "propertyId": 291509323,
+        "areaId": 0,
+        "valueType": "float"
     }
 ]
