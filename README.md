@@ -98,7 +98,7 @@ remotive cloud recordings play 13303517729834103000 --project aleks-base-on-open
 
 # Subscribe to the cloud stream and send the location to Cuttlefish virtual Android device (cvd-1)
 ```
-$ python3 br_location_to_emu.py --url $URL --x_api_key $KEY --namespace android --signal LATITUDE --signal LONGITUDE --cvd_url https://localhost:1443/devices/cvd-1
+$ python3 br_location_to_cuttlefish.py --url $URL --x_api_key $KEY --namespace android --signal LATITUDE --signal LONGITUDE -cvd_url https://localhost:1443/devices/cvd-1
 ```
 
 ### Useful hints
