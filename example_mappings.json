@@ -1,72 +1,52 @@
 [
     {
         "signal": "PERF_VEHICLE_SPEED",
-        "namespace": "android",
         "propertyId": 291504647,
-        "areaId": 0,
-        "valueType": "float"
+        "areaId": 0
     },
     {
        "signal": "CURRENT_GEAR",
-       "namespace": "android", 
        "propertyId": 289408000,
-       "areaId": 0,
-       "valueType": "int32"
+       "areaId": 0
     },
     {
         "signal": "ENGINE_RPM",
-        "namespace": "android",
         "propertyId": 291504901,
-        "areaId": 0,
-        "valueType": "float"
+        "areaId": 0
     },
     {
         "signal": "FUEL_LEVEL",
-        "namespace": "android",
         "propertyId": 291504903,
-        "areaId": 0,
-        "valueType": "float"
+        "areaId": 0
     },
     {
         "signal": "RANGE_REMAINING",
-        "namespace": "android",
         "propertyId": 291504904,
-        "areaId": 0,
-        "valueType": "float"
+        "areaId": 0
     },
     {
         "signal": "HVAC_TEMPERATURE_SET",
-        "namespace": "android",
         "propertyId": 358614275,
-        "areaId": 49,
-        "valueType": "float"
+        "areaId": 49
     },
     {
         "signal": "HVAC_TEMPERATURE_SET",
-        "namespace": "android",
         "propertyId": 358614275,
-        "areaId": 68,
-        "valueType": "float"
+        "areaId": 68
     },
     {
         "signal": "PARKING_BRAKE",
-        "namespace": "android",
         "propertyId": 287310850,
-        "areaId": 0,
-        "valueType": "float"
+        "areaId": 0
     },
     {
         "signal": "TRACTION_CONTROL_ACTIVE",
-        "namespace": "android",
         "propertyId": 287310859,
-        "areaId": 0,
-        "valueType": "float"
+        "areaId": 0
     },
     {
         "signal": "ENV_OUTSIDE_TEMPERATURE",
-        "namespace": "android",
-        "propertyId": 291509323,
-        "areaId": 0,
-        "valueType": "float"
+        "propertyId": 291505923,
+        "areaId": 0
     }
 ]
