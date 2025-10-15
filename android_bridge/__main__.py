@@ -37,24 +37,30 @@ class AndroidBridge:
             "android", self.broker_client, decode_named_values=True
         )
 
-        location_handler = android_namespace.create_input_handler(
-            filters=[
-                FrameFilter(frame_name=args.longitude_signal_name),
-                FrameFilter(frame_name=args.latitude_signal_name),
-            ],
-            callback=self._handle_location,
-        )
+        input_handlers = []
+        if args.with_location:
+            location_handler = android_namespace.create_input_handler(
+                filters=[
+                    FrameFilter(frame_name=args.longitude_signal_name),
+                    FrameFilter(frame_name=args.latitude_signal_name),
+                ],
+                callback=self._handle_location,
+            )
+            input_handlers.append(location_handler)
 
-        filters = list(map(lambda x: FrameFilter(frame_name=x), signal_mappings.keys()))
-        property_handler = android_namespace.create_input_handler(
-            filters=filters,
-            callback=self._handle_property,
-        )
+        if args.with_vhal:
+            filter_names = args.signal if args.signal else signal_mappings.keys()
+            filters = [FrameFilter(frame_name=name) for name in filter_names]
+            property_handler = android_namespace.create_input_handler(
+                filters=filters,
+                callback=self._handle_property,
+            )
+            input_handlers.append(property_handler)
 
         self.namespace_client = NamespaceClient(
             broker_client=self.broker_client,
             namespaces=[android_namespace],
-            input_handlers=[location_handler, property_handler],
+            input_handlers=input_handlers,
         )
 
     async def _handle_location(self, frame: Frame):
@@ -84,11 +90,12 @@ def parse_arguments():
         "--api-key", type=str, required=True, help="API key for broker access"
     )
     parser.add_argument(
-        "--signal-mappings-file",
-        type=str,
-        required=True,
-        metavar="/path/to/file.json",
-        help="JSON file containing signal to signal mappings (array of objects format)",
+        "--with-location",
+        type=bool,
+        required=False,
+        default=False,
+        action=argparse.BooleanOptionalAction,
+        help="If bridge should subscribe for longitude and latidude updates",
     )
     parser.add_argument(
         "--longitude-signal-name",
@@ -107,6 +114,29 @@ def parse_arguments():
         help="Name of the latitude signal",
     )
     parser.add_argument(
+        "--with-vhal",
+        type=bool,
+        required=False,
+        default=False,
+        action=argparse.BooleanOptionalAction,
+        help="If bridge should subscribe for vhal properties",
+    )
+    parser.add_argument(
+        "--signal",
+        type=str,
+        action="append",
+        required=False,
+        metavar="PERF_VEHICLE_SPEED",
+        help="Name of vhal property signal to subscribe to. If this argument is not supplied it will subscribe to all signals in the mapping file",
+    )
+    parser.add_argument(
+        "--signal-mappings-file",
+        type=str,
+        required=False,
+        metavar="/path/to/file.json",
+        help="JSON file containing signal to signal mappings (array of objects format). Required when --with-vhal is used",
+    )
+    parser.add_argument(
         "--emulator-name",
         type=str,
         required=False,
@@ -114,8 +144,12 @@ def parse_arguments():
         metavar="emulator-5554",
         help="Name of the android emulator (see 'adb devices')",
     )
+    args = parser.parse_args()
 
-    return parser.parse_args()
+    if args.with_vhal and not args.signal_mappings_file:
+        parser.error("--signal-mappings-file is required when --with-vhal is used")
+
+    return args
 
 
 async def main(args):
