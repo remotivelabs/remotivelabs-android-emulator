@@ -3,7 +3,7 @@ from remotivelabs.broker import FrameName, SignalValue
 from .libs.adb.adb_emulator import AndroidEmulator
 
 
-class BrokerToEmu:
+class BrokerToEmulator:
     def __init__(
         self,
         emulator: AndroidEmulator,

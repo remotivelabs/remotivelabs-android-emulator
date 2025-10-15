@@ -106,7 +106,7 @@ You can also include both location data and vhal properties by including argumen
 PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python \
   python3 -m android_bridge \
   --url $URL \
-  --api_key $API_KEY \
+  --api-key $API_KEY \
   --with-location \
   --with-vhal \
   --signal-mappings-file example_mappings.json
