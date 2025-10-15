@@ -1,5 +1,5 @@
 docutils==0.20.1
 remotivelabs-broker~=0.9.1
-remotivelabs-topology~=0.9.4
+remotivelabs-topology~=0.10.0
 structlog==25.4.0
 Sphinx==7.2.6
