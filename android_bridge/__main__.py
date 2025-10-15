@@ -24,15 +24,32 @@ logger = structlog.get_logger(__name__)
 
 class AndroidBridge:
     def __init__(self, args) -> None:
-        signal_mappings = parse_signal_mappings(args.signal_mappings_file)
-        android_emulator = AndroidEmulator(emulator_name=args.emulator_name)
-
-        self.br_emu = BrokerToEmu(
-            android_emulator,
-            longitude_signal_name=args.longitude_signal_name,
-            latitude_signal_name=args.latitude_signal_name,
+        signal_mappings = (
+            parse_signal_mappings(args.signal_mappings_file) if args.with_vhal else {}
         )
-        self.br_prop = BrokerToAAOS(android_emulator, signal_mappings)
+        self.br_emu = None
+        self.br_cuttlefish = None
+        self.br_prop = None
+
+        if args.virtual_device_type == "android_emulator":
+            android_emulator = AndroidEmulator(emulator_name=args.emulator_name)
+            if args.with_location:
+                self.br_emu = BrokerToEmu(
+                    android_emulator,
+                    longitude_signal_name=args.longitude_signal_name,
+                    latitude_signal_name=args.latitude_signal_name,
+                )
+
+            if args.with_vhal:
+                self.br_prop = BrokerToAAOS(android_emulator, signal_mappings)
+
+        if args.virtual_device_type == "cuttlefish":
+            if args.with_location:
+                self.br_cuttlefish = BrokerToCuttlefish(
+                    args.cuttlefish_url,
+                    longitude_signal_name=args.longitude_signal_name,
+                    latitude_signal_name=args.latitude_signal_name,
+                )
 
         self.broker_client = BrokerClient(url=args.url, auth=ApiKeyAuth(args.api_key))
         android_namespace = ScriptedNamespace(
@@ -67,11 +84,17 @@ class AndroidBridge:
 
     async def _handle_location(self, frame: Frame):
         # logger.info("received location", frame=frame)
-        self.br_emu.redirect_location_signals_to_emulator(frame.name, frame.value)
+        if self.br_emu is not None:
+            self.br_emu.redirect_location_signals_to_emulator(frame.name, frame.value)
+        if self.br_cuttlefish:
+            self.br_cuttlefish.redirect_location_signals_to_cuttlefish(
+                frame.name, frame.value
+            )
 
     async def _handle_property(self, frame: Frame):
         # logger.info("received property", frame=frame)
-        self.br_prop.update_property(frame.name, frame.value)
+        if self.br_prop:
+            self.br_prop.update_property(frame.name, frame.value)
 
     async def run(self):
         await self.namespace_client.start()
@@ -139,6 +162,14 @@ def parse_arguments():
         help="JSON file containing signal to signal mappings (array of objects format). Required when --with-vhal is used",
     )
     parser.add_argument(
+        "--virtual-device-type",
+        type=str,
+        choices=["android_emulator", "cuttlefish"],
+        required=False,
+        default="android_emulator",
+        help="If android emulator or cuttlefish should be used",
+    )
+    parser.add_argument(
         "--emulator-name",
         type=str,
         required=False,
@@ -146,10 +177,23 @@ def parse_arguments():
         metavar="emulator-5554",
         help="Name of the android emulator (see 'adb devices')",
     )
+    parser.add_argument(
+        "--cuttlefish-url",
+        type=str,
+        required=False,
+        default="https://localhost:1443/devices/cvd-1",
+        metavar="https://localhost:1443/devices/cvd-1",
+        help="Name of the android emulator (see 'adb devices')",
+    )
     args = parser.parse_args()
 
     if args.with_vhal and not args.signal_mappings_file:
         parser.error("--signal-mappings-file is required when --with-vhal is used")
+
+    if args.with_vhal and args.virtual_device_type == "cuttlefish":
+        parser.error(
+            "--virtual-device-type=cuttlefish is not supported for vhal properties"
+        )
 
     return args
 

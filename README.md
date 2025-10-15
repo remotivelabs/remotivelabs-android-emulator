@@ -29,6 +29,15 @@ Download the Android Studio Preview version:
 Create a free [RemotiveCloud](https://cloud.remotivelabs.com/) account and go to the Recordings page. Choose the *City drive to Turning Torso* recording and start the playback. Make sure to pick *configuration_android* when playing.  
 **Note!** If you already have an account, you can import the *City drive to Turning Torso* recording by clicking the import icon in the upper right corner of the recording page.
 
+You may control the playback using our cli tool if needed. See url of playback for project and session ids.
+
+```
+remotive cloud auth login
+remotive cloud recordings mount $SESSION_ID --transformation-name 'configuration_android'  --project $PROJECT_ID
+remotive cloud recordings seek $SESSION_ID --seconds 60 --project $PROECT_ID
+remotive cloud recordings play $SESSION_ID --project $PROJECT_ID
+```
+
 #### Send Location
 
 Run the [AAOS Emulator](https://developer.android.com/studio/run/managing-avds).
@@ -128,24 +137,36 @@ Check the [video](media/video_example_location_broket_to_cuttlefish.mov) in */me
 
 In the screenshots `https://organicmaps.app/` is used, download the apk and install it by doing `adb install app.organicmaps_25030207.apk`
 
-### Start playback of you desired stream
+### Run
 
-> Below hints are copied from the graphical playback interface.
+#### With location
 
-```
-remotive cloud auth login
-remotive cloud recordings mount 13303517729834103000 --transformation-name 'configuration_android'  --project aleks-base-on-open
-remotive cloud recordings seek 13303517729834103000 --seconds 60 --project aleks-base-on-open
-remotive cloud recordings play 13303517729834103000 --project aleks-base-on-open
-```
+Location can be send to the cuttlefish device in the same way as the emulator by specifying  the virtual device type `cuttlefish`
 
-### Subscribe to the cloud stream and send the location to Cuttlefish virtual Android device (cvd-1)
-
-```
-python3 android_bridge/br_location_to_cuttlefish.py --url $URL --x_api_key $KEY --namespace android --signal LATITUDE --signal LONGITUDE -cvd_url https://localhost:1443/devices/cvd-1
+```bash
+python3 -m android_bridge \
+  --url $URL \
+  --api-key $API_KEY \
+  --with-location \
+  --virtual-device-type cuttlefish
 ```
 
-### Useful hints
+You can specify where the cuttlefish device is running by supplying the `--cuttlefish-url` argument.
+
+```bash
+python3 -m android_bridge \
+  --url $URL \
+  --api-key $API_KEY \
+  --with-location \
+  --virtual-device-type cuttlefish \
+  --cuttlefish-url https://localhost:1443/devices/cvd-1
+```
+
+#### Setup VHAL properties
+
+Currently not supported by this example.
+
+#### Useful hints
 
 If you are deploying in cloud this port config might be handy. It enables `WebRTC` along with `ADB` and a `rest` interface.  
 
