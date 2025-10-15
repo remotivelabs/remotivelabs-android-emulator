@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Modify VHAL Properties (Under development) &#8212; Remotive Labs Android Emulator 2023 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4848ba22" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=0c472235" />
     <link rel="stylesheet" type="text/css" href="_static/pyramid.css?v=a5b9c134" />
     <script src="_static/documentation_options.js?v=a4664895"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
@@ -49,16 +49,17 @@
 <h1>Modify VHAL Properties (Under development)<a class="headerlink" href="#modify-vhal-properties-under-development" title="Link to this heading">¶</a></h1>
 <p>In order to set properties in AAOS, the project currently uses the library provided by AOSP. It can be found in
 <a class="reference external" href="https://android.googlesource.com/platform/packages/services/Car/+/master/tools/emulator/vhal_emulator.py">android/platform/packages/services/Car/tools/emulator/</a></p>
-<p>That code has not been update in the latest Android versions. It creates a socket connection directly to a hard coded
+<p>That code has not been updated in the latest Android versions. It creates a socket connection directly to a hard coded
 port in the Car emulator:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">openSocket</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">openSocket</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Connects to an Android Auto device running a Vehicle HAL with simulator.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Hard-coded socket port needs to match the one in DefaultVehicleHal</span>
     <span class="n">remotePortNumber</span> <span class="o">=</span> <span class="mi">33452</span>
+    <span class="n">localPortNumber</span> <span class="o">=</span> <span class="mi">33452</span>
     <span class="n">extraArgs</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="k">if</span> <span class="n">device</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;-s </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">device</span>
-    <span class="n">adbCmd</span> <span class="o">=</span> <span class="s1">&#39;adb </span><span class="si">%s</span><span class="s1"> forward tcp:0 tcp:</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">extraArgs</span><span class="p">,</span> <span class="n">remotePortNumber</span><span class="p">)</span>
+    <span class="n">adbCmd</span> <span class="o">=</span> <span class="s1">&#39;adb </span><span class="si">%s</span><span class="s1"> forward tcp:</span><span class="si">%d</span><span class="s1"> tcp:</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">extraArgs</span><span class="p">,</span> <span class="n">localPortNumber</span><span class="p">,</span> <span class="n">remotePortNumber</span><span class="p">)</span>
 </pre></div>
 </div>
 <section id="execute-the-script">
@@ -96,7 +97,12 @@ Here we are assuming that emulator is on your $PATH.</p>
 </pre></div>
 </div>
 <p>Then, run the script with parameters from Remotive Labs broker:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3<span class="w"> </span>br_props_to_aaos.py<span class="w"> </span>--url<span class="w"> </span><span class="nv">$URL</span><span class="w"> </span>--x_api_key<span class="w"> </span><span class="nv">$KEY</span><span class="w"> </span>--signal<span class="w"> </span><span class="nv">$SIGNAL</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3<span class="w"> </span>-m<span class="w"> </span>android_bridge<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--url<span class="w"> </span><span class="nv">$URL</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--api-key<span class="w"> </span><span class="nv">$KEY</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--with-vhal<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--signal-mappings-file<span class="w"> </span>example_mappings.json<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--signal<span class="w"> </span><span class="nv">$SIGNAL</span>
 </pre></div>
 </div>
 </section>
@@ -107,7 +113,13 @@ Here we are assuming that emulator is on your $PATH.</p>
 <ul class="simple">
 <li><p>Use <strong>PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python</strong> before calling the script:</p></li>
 </ul>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nv">PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION</span><span class="o">=</span>python<span class="w"> </span>python3<span class="w"> </span>br_props_to_aaos.py<span class="w"> </span>--url<span class="w"> </span><span class="nv">$URL</span><span class="w"> </span>--x_api_key<span class="w"> </span><span class="nv">$KEY</span><span class="w"> </span>--signal<span class="w"> </span><span class="nv">$SIGNAL</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nv">PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION</span><span class="o">=</span>python<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>python3<span class="w"> </span>-m<span class="w"> </span>android_bridge<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--url<span class="w"> </span><span class="nv">$URL</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--api-key<span class="w"> </span><span class="nv">$KEY</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--with-vhal<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--signal-mappings-file<span class="w"> </span>example_mappings.json<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--signal<span class="w"> </span><span class="nv">$SIGNAL</span>
 </pre></div>
 </div>
 <ul class="simple">

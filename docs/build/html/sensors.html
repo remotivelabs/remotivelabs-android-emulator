@@ -6,13 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Send Sensors Data to AAOS Emulator &#8212; Remotive Labs Android Emulator 2023 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4848ba22" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=0c472235" />
     <link rel="stylesheet" type="text/css" href="_static/pyramid.css?v=a5b9c134" />
     <script src="_static/documentation_options.js?v=a4664895"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Insights" href="insights.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <!--[if lte IE 6]>
@@ -27,6 +28,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="insights.html" title="Insights"
+             accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Remotive Labs Android Emulator 2023 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Send Sensors Data to AAOS Emulator</a></li> 
       </ul>
@@ -44,7 +48,7 @@
 </pre></div>
 </div>
 <p>This can be done through {$PROJECT_ROOT}/libs/adb/device.py:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">send_sensor_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sensor_name</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">send_sensor_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sensor_name</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
     <span class="c1"># Sensor data is in string with format data0:data1:data2</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_simple_call</span><span class="p">([</span><span class="s1">&#39;emu&#39;</span><span class="p">,</span> <span class="s1">&#39;sensor&#39;</span><span class="p">,</span> <span class="n">sensor_name</span><span class="p">,</span> <span class="n">data</span><span class="p">])</span>
 </pre></div>
@@ -62,6 +66,11 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="insights.html"
+                          title="previous chapter">Insights</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -89,6 +98,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="insights.html" title="Insights"
+             >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Remotive Labs Android Emulator 2023 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Send Sensors Data to AAOS Emulator</a></li> 
       </ul>
