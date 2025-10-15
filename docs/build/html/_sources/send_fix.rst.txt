@@ -1,7 +1,7 @@
 Send Location to AAOS Emulator
 ===========================================================================================
 
-In order to use the script *br_location_to_emu.py*, make sure you completed the steps from the setup page.
+In order to use the script to send geo location data to the emulator, make sure you completed the steps from the setup page.
 
 Then, check the instructions below:
 
@@ -14,13 +14,20 @@ Send Location on Maps
 
 .. code-block:: console
 
-    $ python3 br_location_to_emu.py --url $URL --x_api_key $KEY --signal LATITUDE --signal LONGITUDE
+    $ python3 -m android_bridge \
+      --url $URL \
+      --api-key $KEY \
+      --with-location
+
+.. note::
+   You can use different names for the longitude and latitude signals by supplying the arguments `--longitude-signal-name` and `--latitude-signal-name`.  
 
 5. Open up an AAOS emulator.
 
 .. note::
-
-   For this you do not need to use an userdebug build. For VHAL properties, however, that is mandatory as of now.
+   For this you do not need to use an userdebug build. For VHAL properties, however, that is mandatory as of now.  
+.. note::
+   The geo location data is send to the emulator using the `emu geo fix` command which is specific to android emulators and would not work for other ADB devices.
 
 Check the location changing
 ---------------------------------------------------------------------------------------------

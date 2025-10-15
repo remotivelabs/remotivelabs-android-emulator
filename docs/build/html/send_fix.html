@@ -6,14 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Send Location to AAOS Emulator &#8212; Remotive Labs Android Emulator 2023 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4848ba22" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=0c472235" />
     <link rel="stylesheet" type="text/css" href="_static/pyramid.css?v=a5b9c134" />
     <script src="_static/documentation_options.js?v=a4664895"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="VHAL Properties (Under development)" href="vhal_props.html" />
+    <link rel="next" title="Modify VHAL Properties (Under development)" href="vhal_props.html" />
     <link rel="prev" title="Setup" href="setup.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -30,7 +30,7 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="vhal_props.html" title="VHAL Properties (Under development)"
+          <a href="vhal_props.html" title="Modify VHAL Properties (Under development)"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="setup.html" title="Setup"
@@ -47,7 +47,7 @@
             
   <section id="send-location-to-aaos-emulator">
 <h1>Send Location to AAOS Emulator<a class="headerlink" href="#send-location-to-aaos-emulator" title="Link to this heading">¶</a></h1>
-<p>In order to use the script <em>br_location_to_emu.py</em>, make sure you completed the steps from the setup page.</p>
+<p>In order to use the script to send geo location data to the emulator, make sure you completed the steps from the setup page.</p>
 <p>Then, check the instructions below:</p>
 <section id="send-location-on-maps">
 <h2>Send Location on Maps<a class="headerlink" href="#send-location-on-maps" title="Link to this heading">¶</a></h2>
@@ -57,8 +57,15 @@
 <li><p>Enable location on the emulator.</p></li>
 <li><p>Run on terminal:</p></li>
 </ol>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3<span class="w"> </span>br_location_to_emu.py<span class="w"> </span>--url<span class="w"> </span><span class="nv">$URL</span><span class="w"> </span>--x_api_key<span class="w"> </span><span class="nv">$KEY</span><span class="w"> </span>--signal<span class="w"> </span>LATITUDE<span class="w"> </span>--signal<span class="w"> </span>LONGITUDE
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3<span class="w"> </span>-m<span class="w"> </span>android_bridge<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--url<span class="w"> </span><span class="nv">$URL</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--api-key<span class="w"> </span><span class="nv">$KEY</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--with-location
 </pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can use different names for the longitude and latitude signals by supplying the arguments <cite>–longitude-signal-name</cite> and <cite>–latitude-signal-name</cite>.</p>
 </div>
 <ol class="arabic simple" start="5">
 <li><p>Open up an AAOS emulator.</p></li>
@@ -66,6 +73,10 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>For this you do not need to use an userdebug build. For VHAL properties, however, that is mandatory as of now.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The geo location data is send to the emulator using the <cite>emu geo fix</cite> command which is specific to android emulators and would not work for other ADB devices.</p>
 </div>
 </section>
 <section id="check-the-location-changing">
@@ -102,7 +113,7 @@
   <div>
     <h4>Next topic</h4>
     <p class="topless"><a href="vhal_props.html"
-                          title="next chapter">VHAL Properties (Under development)</a></p>
+                          title="next chapter">Modify VHAL Properties (Under development)</a></p>
   </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
@@ -132,7 +143,7 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="vhal_props.html" title="VHAL Properties (Under development)"
+          <a href="vhal_props.html" title="Modify VHAL Properties (Under development)"
              >next</a> |</li>
         <li class="right" >
           <a href="setup.html" title="Setup"

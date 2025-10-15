@@ -5,7 +5,7 @@ In order to set properties in AAOS, the project currently uses the library provi
 `android/platform/packages/services/Car/tools/emulator/
 <https://android.googlesource.com/platform/packages/services/Car/+/master/tools/emulator/vhal_emulator.py>`_
 
-That code has not been update in the latest Android versions. It creates a socket connection directly to a hard coded
+That code has not been updated in the latest Android versions. It creates a socket connection directly to a hard coded
 port in the Car emulator:
 
 .. code-block:: python
@@ -16,8 +16,9 @@ port in the Car emulator:
         """
         # Hard-coded socket port needs to match the one in DefaultVehicleHal
         remotePortNumber = 33452
+        localPortNumber = 33452
         extraArgs = '' if device is None else '-s %s' % device
-        adbCmd = 'adb %s forward tcp:0 tcp:%d' % (extraArgs, remotePortNumber)
+        adbCmd = 'adb %s forward tcp:%d tcp:%d' % (extraArgs, localPortNumber, remotePortNumber)
 
 Execute the script
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -70,7 +71,12 @@ Then, run the script with parameters from Remotive Labs broker:
 
 .. code-block:: console
 
-    $ python3 br_props_to_aaos.py --url $URL --x_api_key $KEY --signal $SIGNAL
+    $ python3 -m android_bridge \
+      --url $URL \
+      --api-key $KEY \
+      --with-vhal \
+      --signal-mappings-file example_mappings.json \
+      --signal $SIGNAL
 
 
 Issues with protobuf
@@ -84,7 +90,13 @@ These are options you can try to solve it:
 
 .. code-block:: console
 
-    $ PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python python3 br_props_to_aaos.py --url $URL --x_api_key $KEY --signal $SIGNAL
+    $ PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python \
+      python3 -m android_bridge \
+      --url $URL \
+      --api-key $KEY \
+      --with-vhal \
+      --signal-mappings-file example_mappings.json \
+      --signal $SIGNAL
 
 
 * Generate the protobuf file from hardware/interfaces/automotive/vehicle/2.0/default/impl/vhal_v2_0
