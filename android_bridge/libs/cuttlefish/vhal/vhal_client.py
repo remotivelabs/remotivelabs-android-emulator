@@ -1,7 +1,9 @@
+import asyncio
 from enum import IntEnum
 from typing import Union
 
-import grpc
+from google.protobuf import empty_pb2
+from grpc.aio import insecure_channel
 
 from .VehicleServer_pb2 import (
     VehiclePropValue,
@@ -12,9 +14,34 @@ from .VehicleServer_pb2_grpc import VehicleServerStub
 
 
 class VhalClient:
-    def __init__(self, cuttlefish_vhal_url: str):
-        channel = grpc.insecure_channel(cuttlefish_vhal_url)
+    def __init__(
+        self,
+        cuttlefish_vhal_url: str,
+        on_vhal_prop_change=None,
+        property_ids_to_subscribe: list[int] = [],
+    ):
+        channel = insecure_channel(cuttlefish_vhal_url)
         self.stub = VehicleServerStub(channel)
+        self.on_vhal_prop_change = on_vhal_prop_change
+        self.property_ids_to_subscribe = property_ids_to_subscribe
+        if self.on_vhal_prop_change is not None:
+            try:
+                loop = asyncio.get_running_loop()
+                loop.create_task(self._consume_vhal_properties())
+            except RuntimeError:
+                asyncio.run(self._consume_vhal_properties())
+
+    async def _consume_vhal_properties(self):
+        stream = self.stub.StartPropertyValuesStream(empty_pb2.Empty())
+        async for message in stream:
+            for value in message.values:
+                if (
+                    self.on_vhal_prop_change is not None
+                    and value.prop in self.property_ids_to_subscribe
+                ):
+                    self.on_vhal_prop_change(
+                        value.area_id, value.prop, self._get_property_value(value)
+                    )
 
     def set_property(
         self, area_id: int, prop: int, value: Union[int, float, bytes, str]
@@ -23,6 +50,39 @@ class VhalClient:
             area_id=area_id, prop=prop, value=value
         )
         self.stub.SetValues(requests)
+
+    def _get_property_value(
+        self, prop_value: VehiclePropValue
+    ) -> Union[int, float, bytes, str]:
+        """
+        Extracts and returns the value from a VehiclePropValue instance based on its property type.
+
+        Raises:
+            ValueError: If the property type is MIXED or unknown.
+        """
+        prop_type = prop_value.prop & PROP_TYPE_MASK
+        if prop_type == VehiclePropertyType.BOOLEAN:
+            return prop_value.int32_values[0]
+        elif prop_type == VehiclePropertyType.INT32:
+            return prop_value.int32_values[0]
+        elif prop_type == VehiclePropertyType.INT32_VEC:
+            return prop_value.int32_values[0]
+        elif prop_type == VehiclePropertyType.INT64:
+            return prop_value.int64_values[0]
+        elif prop_type == VehiclePropertyType.INT64_VEC:
+            return prop_value.int64_values[0]
+        elif prop_type == VehiclePropertyType.FLOAT:
+            return prop_value.float_values[0]
+        elif prop_type == VehiclePropertyType.FLOAT_VEC:
+            return prop_value.float_values[0]
+        elif prop_type == VehiclePropertyType.BYTES:
+            return prop_value.byte_values
+        elif prop_type == VehiclePropertyType.STRING:
+            return prop_value.string_value
+        elif prop_type == VehiclePropertyType.MIXED:
+            raise ValueError("Property type MIXED is not supported")
+        else:
+            raise ValueError("Unknown property type")
 
     def _create_property_requests(
         self, area_id: int, prop: int, value: Union[int, float, bytes, str]
