@@ -11,6 +11,7 @@ class AndroidEmulator:
         """
         self.emulator_name = emulator_name
         self._root_adb_device()
+        self._forward_ports()
 
     def _root_adb_device(self):
         """
@@ -22,6 +23,20 @@ class AndroidEmulator:
         )
         subprocess.check_output(
             ["adb", "-s", self.emulator_name, "wait-for-device"], encoding="UTF-8"
+        )
+
+    def _forward_ports(self):
+        """Enables port forwarding to the Automotive VHAL emualator"""
+        subprocess.check_output(
+            [
+                "adb",
+                "-s",
+                self.emulator_name,
+                "forward",
+                "tcp:33452",
+                "tcp:33452",
+            ],
+            encoding="UTF-8",
         )
 
     def _send_adb_command(self, cmd):
