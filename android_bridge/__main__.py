@@ -10,13 +10,10 @@ from remotivelabs.topology.namespaces.filters import FrameFilter
 from remotivelabs.topology.namespaces.namespace_client import NamespaceClient
 from remotivelabs.topology.namespaces.scripted import ScriptedNamespace
 
-from android_bridge.signal_mapping import parse_signal_mappings
-
 from .arguments import parse_arguments
-from .br_generic_props_to_aaos import BrokerToAAOS
-from .br_location_to_cuttlefish import BrokerToCuttlefish
-from .br_location_to_emulator import BrokerToEmulator
-from .libs.adb.adb_emulator import AndroidEmulator
+from .broker_to_cuttlefish import BrokerToCuttlefish
+from .broker_to_emulator import BrokerToEmulator
+from .signal_mapping import parse_signal_mappings
 
 logger = structlog.get_logger(__name__)
 
@@ -33,27 +30,23 @@ class AndroidBridge:
         )
         self.br_emulator = None
         self.br_cuttlefish = None
-        self.br_aaos = None
 
         if args.virtual_device_type == "android_emulator":
-            android_emulator = AndroidEmulator(emulator_name=args.emulator_name)
-            if args.with_location:
-                self.br_emulator = BrokerToEmulator(
-                    android_emulator,
-                    longitude_signal_name=args.longitude_signal_name,
-                    latitude_signal_name=args.latitude_signal_name,
-                )
-
-            if args.with_vhal:
-                self.br_aaos = BrokerToAAOS(android_emulator, signal_mappings)
+            self.br_emulator = BrokerToEmulator(
+                emulator_name=args.emulator_name,
+                longitude_signal_name=args.longitude_signal_name,
+                latitude_signal_name=args.latitude_signal_name,
+                signal_mappings=signal_mappings,
+            )
 
         if args.virtual_device_type == "cuttlefish":
-            if args.with_location:
-                self.br_cuttlefish = BrokerToCuttlefish(
-                    args.cuttlefish_url,
-                    longitude_signal_name=args.longitude_signal_name,
-                    latitude_signal_name=args.latitude_signal_name,
-                )
+            self.br_cuttlefish = BrokerToCuttlefish(
+                cuttlefish_gnss_url=args.cuttlefish_gnss_url,
+                cuttlefish_vhal_url=args.cuttlefish_vhal_url,
+                longitude_signal_name=args.longitude_signal_name,
+                latitude_signal_name=args.latitude_signal_name,
+                signal_mappings=signal_mappings,
+            )
 
         self.broker_client = BrokerClient(url=args.url, auth=ApiKeyAuth(args.api_key))
         android_namespace = ScriptedNamespace(
@@ -99,8 +92,11 @@ class AndroidBridge:
 
     async def _handle_property(self, frame: Frame):
         # logger.info("received property", frame=frame)
-        if self.br_aaos:
-            self.br_aaos.update_property(frame.name, frame.value)
+        if self.br_emulator:
+            self.br_emulator.update_property(frame.name, frame.value)
+
+        if self.br_cuttlefish:
+            self.br_cuttlefish.update_property(frame.name, frame.value)
 
     async def run(self):
         await self.namespace_client.start()
