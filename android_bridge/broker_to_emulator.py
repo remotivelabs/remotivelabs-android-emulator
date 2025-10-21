@@ -40,7 +40,6 @@ class BrokerToEmulator:
         if mapping is not None:
             if mapping.signal == "TRACTION_CONTROL_ACTIVE":
                 self._set_property(mapping.property_id, mapping.area_id, bool(value))
-                # pass
             else:
                 self._set_property(mapping.property_id, mapping.area_id, value)
 
@@ -50,4 +49,3 @@ class BrokerToEmulator:
             self.vhal.set_property(property_id, area_id, value)
         except Exception as e:
             print(f"Error setting property ID 0x{property_id:08x}: {e}")
-            pass

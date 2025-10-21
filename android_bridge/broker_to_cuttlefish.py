@@ -15,7 +15,11 @@ class BrokerToCuttlefish:
         signal_mappings: dict[str, SignalMapping],
     ):
         self.gnss = GnssClient(cuttlefish_gnss_url)
-        self.vhal = VhalClient(cuttlefish_vhal_url)
+        self.vhal = VhalClient(
+            cuttlefish_vhal_url=cuttlefish_vhal_url,
+            on_vhal_prop_change=self._on_vhal_prop_change,
+            property_ids_to_subscribe=[358614275],
+        )
         self.signal_mappings = signal_mappings
         self.longitude_signal_name = longitude_signal_name
         self.latitude_signal_name = latitude_signal_name
@@ -44,3 +48,6 @@ class BrokerToCuttlefish:
             except Exception as e:
                 print(f"Error setting property ID 0x{mapping.property_id:08x}: {e}")
                 pass
+
+    def _on_vhal_prop_change(self, area_id, property_id, value):
+        print(f"area_id:{area_id} - property_id:{property_id} - value:{value}")
