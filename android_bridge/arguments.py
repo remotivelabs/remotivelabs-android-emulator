@@ -78,21 +78,24 @@ def parse_arguments():
         help="Name of the android emulator (see 'adb devices')",
     )
     parser.add_argument(
-        "--cuttlefish-url",
+        "--cuttlefish-gnss-url",
         type=str,
         required=False,
         default="https://localhost:1443/devices/cvd-1",
         metavar="https://localhost:1443/devices/cvd-1",
-        help="Name of the android emulator (see 'adb devices')",
+        help="URL for the cuttlefish device",
+    )
+    parser.add_argument(
+        "--cuttlefish-vhal-url",
+        type=str,
+        required=False,
+        default="localhost:9300",
+        metavar="localhost:9300",
+        help="URL for the vhal grpc connection",
     )
     args = parser.parse_args()
 
     if args.with_vhal and not args.signal_mappings_file:
         parser.error("--signal-mappings-file is required when --with-vhal is used")
-
-    if args.with_vhal and args.virtual_device_type == "cuttlefish":
-        parser.error(
-            "--virtual-device-type=cuttlefish is not supported for vhal properties"
-        )
 
     return args

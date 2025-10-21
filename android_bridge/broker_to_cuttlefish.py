@@ -1,16 +1,22 @@
 from remotivelabs.broker import FrameName, SignalValue
-import requests
-import json
+
+from .libs.cuttlefish.gnss.gnss_client import GnssClient
+from .libs.cuttlefish.vhal.vhal_client import VhalClient
+from .signal_mapping import SignalMapping
 
 
 class BrokerToCuttlefish:
     def __init__(
         self,
-        cuttlefish_url,
+        cuttlefish_gnss_url: str,
+        cuttlefish_vhal_url: str,
         longitude_signal_name,
         latitude_signal_name,
+        signal_mappings: dict[str, SignalMapping],
     ):
-        self.cuttlefish_url = cuttlefish_url
+        self.gnss = GnssClient(cuttlefish_gnss_url)
+        self.vhal = VhalClient(cuttlefish_vhal_url)
+        self.signal_mappings = signal_mappings
         self.longitude_signal_name = longitude_signal_name
         self.latitude_signal_name = latitude_signal_name
         self.lat = None
@@ -25,27 +31,16 @@ class BrokerToCuttlefish:
             self.lat = float(value)
 
         if self.lat is not None and self.lon is not None:
-            payload = {
-                "delay": 0,
-                "coordinates": [
-                    {
-                        "latitude": self.lat,
-                        "longitude": self.lon,
-                        "elevation": 15,
-                    }
-                ],
-            }
-            headers = {"Content-Type": "application/json"}
+            self.gnss.send_gps_vector(longitude=self.lon, latitude=self.lat)
 
+    def update_property(self, name: FrameName, value: SignalValue):
+        """Set a property in AAOS via VHAL"""
+        mapping = self.signal_mappings.get(name)
+        if mapping is not None:
             try:
-                response = requests.post(
-                    self.cuttlefish_url + "/services/GnssGrpcProxy/SendGpsVector",
-                    headers=headers,
-                    data=json.dumps(payload),
-                    verify=False,  # Only use this in dev/testing
-                    timeout=10,  # Set a timeout of 10 seconds
+                self.vhal.set_property(
+                    area_id=mapping.area_id, prop=mapping.property_id, value=value
                 )
-                response.raise_for_status()
-                print("Location sent successfully.")
-            except requests.RequestException as e:
-                print(f"Failed to send location: {e}")
+            except Exception as e:
+                print(f"Error setting property ID 0x{mapping.property_id:08x}: {e}")
+                pass
