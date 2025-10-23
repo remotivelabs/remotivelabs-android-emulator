@@ -1,1 +1,4 @@
 __pycache__
+*.apk
+*.zip
+*.tar.gz
