@@ -10,7 +10,7 @@ If you do not wish to build your own android version you can download a pre-buil
 
 #### Disable internal VHAL server
 
-To be able to pass VHAL properties from the host it needs to be configured to run the `vhal_proxy_server`. This is done during startup for for Android to actually use it you need to build the image with the fake vhal server disabled. Update `/device/google/trout/aosp_trout_x86_64.mk` (depending on the architecture) and change the value of `ENABLE_VHAL_FAKE_GRPC_SERVER` to `false`.
+To be able to pass VHAL properties from the host it needs to be configured to run the `vhal_proxy_server`. This is done during startup for Android to actually use it you need to build the image with the fake vhal server disabled. Update `/device/google/trout/aosp_trout_x86_64.mk` (depending on the architecture) and change the value of `ENABLE_VHAL_FAKE_GRPC_SERVER` to `false`.
 
 ```
 ENABLE_VHAL_FAKE_GRPC_SERVER ?= false
@@ -23,7 +23,7 @@ BOARD_KERNEL_CMDLINE += androidboot.vendor.vehiclehal.server.cid=2
 BOARD_KERNEL_CMDLINE += androidboot.vendor.vehiclehal.server.port=9300
 ```
 
-Build the trout with `dist` so that it generates the image and host tools in the out/dist folder. Copy image and host tools tarbal to this folder and build the docker image. You may need to rename the image file to match `aosp_trout_x86_64-img.zip` to supply it as a build argument.
+Build the trout with `dist` so that it generates the image and host tools in the out/dist folder. Copy image and host tools tarbal to this folder and build the docker image. You may need to rename the image file to match `aosp_trout_x86_64-img.zip` or supply it as a build argument.
 
 ## Run
 
