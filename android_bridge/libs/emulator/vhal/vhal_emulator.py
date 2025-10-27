@@ -224,7 +224,7 @@ class Vhal:
         elif valType == self._types.TYPE_BYTES:
             propValue.bytes_value = value
         elif valType == self._types.TYPE_BOOLEAN:
-            propValue.int32_values.append(value)
+            propValue.int32_values.append(bool(value))
         elif valType == self._types.TYPE_INT32:
             propValue.int32_values.append(value)
         elif valType == self._types.TYPE_INT64:
