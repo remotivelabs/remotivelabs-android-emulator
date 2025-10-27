@@ -40,6 +40,21 @@ Note that you must set SELinux as permissive mode!
 
 For running the example together with cuttlefish we will show how to run it with the cuttlefish device in a docker container. This requires you to either build your own image or use one that is pre-built. [Build and run Cuttlefish](/cuttlefish/README.md)
 
+Start the custom cuttlefish image with the following command:
+
+```bash
+docker run \
+  -d \
+  -p 1443:1443 \
+  -p 8443:8443 \
+  -p 9300:9300 \
+  -v $PWD/apks:/root/apks \
+  --ulimit nofile=4096:4096 \
+  --privileged \
+  --name cuttlefish \
+  -t remotivelabs/remotivelabs-cuttlefish
+```
+
 ### Maps
 
 If you use an emulator without Google Maps or if you use Cuttlefish you may wish to install your own. You can for example use the one from the screenshots,  `https://organicmaps.app/`, download the apk and install it by doing `adb install app.organicmaps_25030207.apk`
