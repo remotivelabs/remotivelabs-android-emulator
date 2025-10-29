@@ -20,8 +20,10 @@ class VhalClient:
         on_vhal_prop_change=None,
         property_ids_to_subscribe: list[int] = [],
     ):
+        print("Connecting to vhal server on %s" % cuttlefish_vhal_url)
         channel = insecure_channel(cuttlefish_vhal_url)
         self.stub = VehicleServerStub(channel)
+        print("Connected to vhal server")
         self.on_vhal_prop_change = on_vhal_prop_change
         self.property_ids_to_subscribe = property_ids_to_subscribe
         if self.on_vhal_prop_change is not None:
