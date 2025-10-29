@@ -78,8 +78,8 @@ Before running you need to set some environment variables for authentication wit
 ```
 
 export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
-export URL=<broker_url>
-export API_KEY=<broker_api_key>
+export REMOTIVE_BROKER_URL=<broker_url>
+export REMOTIVE_BROKER_API_KEY=<broker_api_key>
 ```
 
 ### Location
@@ -91,14 +91,14 @@ To run the example in the simplest form, run the following python module. This w
 ```bash
 # Emulator
 python3 -m android_bridge \
-  --url $URL \
-  --api-key $API_KEY \
+  --url $REMOTIVE_BROKER_URL \
+  --api-key $REMOTIVE_BROKER_API_KEY \
   --with-location
 
 # Cuttlefish
 python3 -m android_bridge \
-  --url $URL \
-  --api-key $API_KEY \
+  --url $REMOTIVE_BROKER_URL \
+  --api-key $REMOTIVE_BROKER_API_KEY \
   --with-location \
   --virtual-device-type cuttlefish
 ```
@@ -110,13 +110,15 @@ The same script can be used to feed VHAL properties to either the emulator or th
 ```bash
 # Emulator
 python3 -m android_bridge \
-  --url $URL \
-  --api-key $API_KEY \
+  --url $REMOTIVE_BROKER_URL \
+  --api-key $REMOTIVE_BROKER_API_KEY \
   --with-vhal \
   --signal-mappings-file example_mappings.json
 
 # Cuttlefish
 python3 -m android_bridge \
+  --url $REMOTIVE_BROKER_URL \
+  --api-key $REMOTIVE_BROKER_API_KEY \
   --url $URL \
   --api-key $API_KEY \
   --with-vhal \
@@ -128,8 +130,8 @@ If you want to limit the amount of VHAL properties you send to Android you can s
 
 ```bash
 python3 -m android_bridge \
-  --url $URL \
-  --api-key $API_KEY \
+  --url $REMOTIVE_BROKER_URL \
+  --api-key $REMOTIVE_BROKER_API_KEY \
   --with-vhal \
   --signal-mappings-file example_mappings.json \
   --signal PERF_VEHICLE_SPEED \
@@ -142,8 +144,8 @@ It is possible run the script with both location and VHAL properties enabled at 
 
 ```bash
 python3 -m android_bridge \
-  --url $URL \
-  --api-key $API_KEY \
+  --url $REMOTIVE_BROKER_URL \
+  --api-key $REMOTIVE_BROKER_API_KEY \
   --with-location \
   --with-vhal \
   --signal-mappings-file example_mappings.json

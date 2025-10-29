@@ -136,6 +136,7 @@ class Vhal:
         # Open the socket and connect
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.connect(("localhost", portNumber))
+        print("Connected to vhal emulator")
 
     def rx_msg(self):
         """
