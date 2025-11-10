@@ -32,7 +32,16 @@ done
 # Enable wifi and connect to network
 ./bin/adb shell svc wifi enable
 ./bin/adb shell cmd wifi connect-network VirtWifi open
+
 # Allow apps to be used while driving
+until
+  ./bin/adb shell service list | grep -q car_service
+do
+  echo "Waiting for car_service"
+  sleep 5
+done
+# Extra sleep to ensure car service is up
+sleep 10
 ./bin/adb shell cmd car_service enable-uxr false
 
 # Reroute container port 9300 to internal VHAL proxy server
