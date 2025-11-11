@@ -13,6 +13,7 @@ sleep 5
 # Launch Cuttlefish image
 ./bin/adb devices
 ./bin/launch_cvd --daemon \
+  --memory_mb=${CUTTLEFISH_MEMORY_MB:-4096} \
   --guest_enforce_security=false \
   --enable_vhal_proxy_server \
   --display=width=1400,height=800,dpi=160,refresh_rate_hz=30 \
@@ -40,8 +41,6 @@ do
   echo "Waiting for car_service"
   sleep 5
 done
-# Extra sleep to ensure car service is up
-sleep 10
 ./bin/adb shell cmd car_service enable-uxr false
 
 # Reroute container port 9300 to internal VHAL proxy server
