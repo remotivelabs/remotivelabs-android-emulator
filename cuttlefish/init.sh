@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # Increase open files limit for launch_cvd
 ulimit -n 4096
 
@@ -42,6 +41,7 @@ do
   sleep 5
 done
 ./bin/adb shell cmd car_service enable-uxr false
+sleep 5
 
 # Reroute container port 9300 to internal VHAL proxy server
 socat TCP-LISTEN:9300,fork,reuseaddr,bind=$(hostname -i) TCP:192.168.98.1:9300 &
@@ -49,4 +49,17 @@ socat TCP-LISTEN:9300,fork,reuseaddr,bind=$(hostname -i) TCP:192.168.98.1:9300 &
 echo "Cuttlefish is started and ready to use"
 
 # To keep it running
-tail -f /dev/null
+sleep infinity &
+blocked_pid=$!
+
+stop_cuttlefish() {
+  ./bin/adb reboot
+  ./bin/stop_cvd
+  kill -TERM "$blocked_pid" 2>/dev/null
+  exit 0
+}
+
+trap stop_cuttlefish INT TERM
+
+wait "$blocked_pid"
+stop_cuttlefish
