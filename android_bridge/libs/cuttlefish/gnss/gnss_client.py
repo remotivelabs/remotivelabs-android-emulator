@@ -11,7 +11,7 @@ class GnssClient:
 
     def send_gps_vector(self, longitude: float, latitude: float, elevation: float = 15):
         payload = {
-            "delay": 0,
+            "delay": 100,
             "coordinates": [
                 {
                     "latitude": latitude,

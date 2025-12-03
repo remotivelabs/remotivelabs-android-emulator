@@ -9,9 +9,15 @@ ulimit -n 4096
 until nc -z localhost 2081 2>/dev/null; do sleep 1; done
 sleep 5
 
+mkdir -p state/images
+cp -n bootloader state/images
+cp -n *.img state/images
+
 # Launch Cuttlefish image
 ./bin/adb devices
 ./bin/launch_cvd --daemon \
+  --instance_dir=/root/state/ \
+  --system_image_dir=/root/state/images \
   --memory_mb=${CUTTLEFISH_MEMORY_MB:-4096} \
   --guest_enforce_security=false \
   --enable_vhal_proxy_server \
@@ -42,6 +48,11 @@ do
 done
 ./bin/adb shell cmd car_service enable-uxr false
 sleep 5
+
+# Enable Car info in the cluster panel
+./bin/adb shell pm grant android.car.cluster android.car.permission.CAR_ENERGY
+./bin/adb shell pm grant android.car.cluster android.car.permission.CAR_SPEED
+./bin/adb shell am force-stop android.car.cluster
 
 # Reroute container port 9300 to internal VHAL proxy server
 socat TCP-LISTEN:9300,fork,reuseaddr,bind=$(hostname -i) TCP:192.168.98.1:9300 &

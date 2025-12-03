@@ -23,6 +23,16 @@ BOARD_KERNEL_CMDLINE += androidboot.vendor.vehiclehal.server.cid=2
 BOARD_KERNEL_CMDLINE += androidboot.vendor.vehiclehal.server.port=9300
 ```
 
+#### Give instrument cluster SPEED permission
+
+To make the instrument panel be able to display speed we need to declare the permission in the manifest. Add the following to the `packages/apps/Car/Cluster/DirectRenderingCluster/AndroidManifest.xml`
+
+```
+<uses-permission android:name="android.car.permission.CAR_SPEED"/>
+```
+
+When can then grant the permission in the init script.
+
 Build the trout with `dist` so that it generates the image and host tools in the out/dist folder. Copy image and host tools tarbal to this folder and build the docker image. You may need to rename the image file to match `aosp_trout_x86_64-img.zip` or supply it as a build argument.
 
 ## Run
