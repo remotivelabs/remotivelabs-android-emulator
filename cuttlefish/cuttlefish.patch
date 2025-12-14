@@ -1,0 +1,95 @@
+diff --git a/aosp_trout_arm64.mk b/aosp_trout_arm64.mk
+index b4ce159..53f71d5 100644
+--- a/aosp_trout_arm64.mk
++++ b/aosp_trout_arm64.mk
+@@ -42,8 +42,8 @@ include device/google/trout/aosp_trout_common.mk
+ 
+ DEVICE_MANIFEST_FILE += device/google/trout/trout_arm64/manifest.xml
+ 
+-PRODUCT_PROPERTY_OVERRIDES += \
+-	vendor.ser.bt-uart?= \
++# PRODUCT_PROPERTY_OVERRIDES += \
++# 	vendor.ser.bt-uart?= \
+ 
+ PRODUCT_PACKAGES += \
+ 	vport_trigger \
+@@ -59,7 +59,7 @@ LOCAL_SENSOR_FILE_OVERRIDES := true
+ 
+ LOCAL_ENABLE_OEMLOCK ?= false
+ 
+-LOCAL_ENABLE_LIGHT ?= false
++LOCAL_ENABLE_LIGHT ?= true
+ 
+ UEVENTD_ODM_COPY_FILE ?= device/google/trout/product_files/odm/ueventd.rc
+ 
+@@ -72,7 +72,7 @@ PRODUCT_COPY_FILES += \
+     frameworks/native/data/etc/android.hardware.sensor.accelerometer.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.accelerometer.xml \
+ 
+ # WiFi configuration
+-PRODUCT_ENFORCE_MAC80211_HWSIM ?= false
++# PRODUCT_ENFORCE_MAC80211_HWSIM ?= false
+ ifndef DEVICE_VIRTWIFI_PORT
+ DEVICE_VIRTWIFI_PORT := eth0
+ endif
+diff --git a/aosp_trout_x86_64.mk b/aosp_trout_x86_64.mk
+index b5a177e..c041472 100644
+--- a/aosp_trout_x86_64.mk
++++ b/aosp_trout_x86_64.mk
+@@ -26,7 +26,7 @@ LOCAL_AUDIOCONTROL_PROPERTIES ?= \
+     ro.vendor.audiocontrol.server.port=9410 \
+ 
+ # Vehicle HAL
+-ENABLE_VHAL_FAKE_GRPC_SERVER ?= true
++ENABLE_VHAL_FAKE_GRPC_SERVER ?= false
+ 
+ TARGET_VULKAN_SUPPORT := true
+ 
+diff --git a/trout_arm64/BoardConfig.mk b/trout_arm64/BoardConfig.mk
+index 4c5c0f7..97f4b99 100644
+--- a/trout_arm64/BoardConfig.mk
++++ b/trout_arm64/BoardConfig.mk
+@@ -121,13 +121,13 @@ BOARD_KERNEL_CMDLINE += androidboot.serialno=CUTTLEFISHCVD01
+ BOARD_KERNEL_CMDLINE += androidboot.cf_devcfg=1
+ 
+ # Set GPU properties
+-BOARD_KERNEL_CMDLINE += androidboot.cpuvulkan.version=0
+-BOARD_KERNEL_CMDLINE += androidboot.hardware.gralloc=minigbm
+-BOARD_KERNEL_CMDLINE += androidboot.hardware.hwcomposer=ranchu
+-BOARD_KERNEL_CMDLINE += androidboot.hardware.egl=emulation
+-BOARD_KERNEL_CMDLINE += androidboot.hardware.hwcomposer.mode=client
+-BOARD_KERNEL_CMDLINE += androidboot.hardware.hwcomposer.display_finder_mode=drm
+-BOARD_KERNEL_CMDLINE += androidboot.lcd_density=160
++# BOARD_KERNEL_CMDLINE += androidboot.cpuvulkan.version=0
++# BOARD_KERNEL_CMDLINE += androidboot.hardware.gralloc=minigbm
++# BOARD_KERNEL_CMDLINE += androidboot.hardware.hwcomposer=ranchu
++# BOARD_KERNEL_CMDLINE += androidboot.hardware.egl=emulation
++# BOARD_KERNEL_CMDLINE += androidboot.hardware.hwcomposer.mode=client
++# BOARD_KERNEL_CMDLINE += androidboot.hardware.hwcomposer.display_finder_mode=drm
++# BOARD_KERNEL_CMDLINE += androidboot.lcd_density=160
+ 
+ # Add WiFi configuration for VirtWifi network
+ BOARD_KERNEL_CMDLINE += androidboot.wifi_mac_prefix=5554
+@@ -137,3 +137,6 @@ BOARD_KERNEL_CMDLINE += androidboot.fstab_name=fstab androidboot.fstab_suffix=tr
+ 
+ # Prevent mac80211_hwsim from simulating any radios
+ BOARD_KERNEL_CMDLINE += mac80211_hwsim.radios=0
++
++BOARD_KERNEL_CMDLINE += androidboot.vendor.vehiclehal.server.cid=2
++BOARD_KERNEL_CMDLINE += androidboot.vendor.vehiclehal.server.port=9300
+diff --git a/trout_x86_64/BoardConfig.mk b/trout_x86_64/BoardConfig.mk
+index c2b269b..7e590b0 100644
+--- a/trout_x86_64/BoardConfig.mk
++++ b/trout_x86_64/BoardConfig.mk
+@@ -39,8 +39,10 @@ TARGET_NATIVE_BRIDGE_2ND_ABI := armeabi-v7a armeabi
+ 
+ # VHAL Fake Server Address
+ # VMADDR_CID_LOCAL (1) for the fake server in the same VM.
+-BOARD_KERNEL_CMDLINE += androidboot.vendor.vehiclehal.server.cid=1
+-BOARD_KERNEL_CMDLINE += androidboot.vendor.vehiclehal.server.port=9210
++# BOARD_KERNEL_CMDLINE += androidboot.vendor.vehiclehal.server.cid=1
++# BOARD_KERNEL_CMDLINE += androidboot.vendor.vehiclehal.server.port=9210
++BOARD_KERNEL_CMDLINE += androidboot.vendor.vehiclehal.server.cid=2
++BOARD_KERNEL_CMDLINE += androidboot.vendor.vehiclehal.server.port=9300
+ 
+ -include device/google/trout/shared/BoardConfig.mk
+ -include device/google/cuttlefish/shared/swiftshader/BoardConfig.mk

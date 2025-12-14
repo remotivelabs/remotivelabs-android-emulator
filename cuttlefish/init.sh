@@ -16,6 +16,7 @@ cp -n *.img state/images
 # Launch Cuttlefish image
 ./bin/adb devices
 ./bin/launch_cvd --daemon \
+  --vhost_user_vsock=false \
   --instance_dir=/root/state/ \
   --system_image_dir=/root/state/images \
   --memory_mb=${CUTTLEFISH_MEMORY_MB:-4096} \
@@ -38,6 +39,9 @@ done
 # Enable wifi and connect to network
 ./bin/adb shell svc wifi enable
 ./bin/adb shell cmd wifi connect-network VirtWifi open
+
+# Lower MTU in case network does not support default 1500
+./bin/adb shell ip link set mtu 1400 dev wlan0
 
 # Allow apps to be used while driving
 until
