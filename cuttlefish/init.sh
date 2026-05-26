@@ -19,11 +19,13 @@ cp -n *.img state/images
   --vhost_user_vsock=false \
   --instance_dir=/root/state/ \
   --system_image_dir=/root/state/images \
+  --gpu_mode=${CUTTLEFISH_GPU_MODE:-auto} \
   --memory_mb=${CUTTLEFISH_MEMORY_MB:-4096} \
+  --cpus=${CUTTLEFISH_CPUS:-2} \
   --guest_enforce_security=false \
   --enable_vhal_proxy_server \
-  --display=width=1400,height=800,dpi=160,refresh_rate_hz=30 \
-  --display=width=600,height=800,dpi=160,refresh_rate_hz=30 \
+  --display=${CUTTLEFISH_DISPLAY_MAIN:-width=1400,height=800,dpi=160,refresh_rate_hz=30} \
+  --display=${CUTTLEFISH_DISPLAY_CLUSTER:-width=600,height=800,dpi=160,refresh_rate_hz=30} \
   --report_anonymous_usage_stats=n
 sleep 3
 
