@@ -1,4 +1,4 @@
-FROM us-docker.pkg.dev/android-cuttlefish-artifacts/cuttlefish-orchestration/cuttlefish-orchestration:1.28.0
+FROM us-docker.pkg.dev/android-cuttlefish-artifacts/cuttlefish-orchestration/cuttlefish-orchestration:1.53.0
 ARG TARGETARCH
 
 ENV DEBIAN_FRONTEND=noninteractive
