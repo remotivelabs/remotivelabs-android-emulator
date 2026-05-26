@@ -45,6 +45,9 @@ done
 # Lower MTU in case network does not support default 1500
 ./bin/adb shell ip link set mtu 1400 dev wlan0
 
+# Fix internet connectivity in the Cuttlefish instance by masquerading outgoing packets from eth0
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+
 # Allow apps to be used while driving
 until
   ./bin/adb shell service list | grep -q car_service
