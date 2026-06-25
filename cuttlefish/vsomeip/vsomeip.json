@@ -1,0 +1,80 @@
+{
+  "unicast": "172.31.0.12",
+  "logging": {
+    "level": "info",
+    "console": "true",
+    "dlt": "false"
+  },
+  "applications": [
+    {
+      "name": "android_someip_client",
+      "id": "0x1212"
+    }
+  ],
+  "services": [
+    {
+      "service": "0x0064",
+      "instance": "0x0001",
+      "unicast": "172.31.0.18",
+      "unreliable": "16000",
+      "events": [
+        { "event": "0x03E9", "is_field": "true", "update-cycle": "0" }
+      ],
+      "eventgroups": [
+        { "eventgroup": "0x0141", "events": [ "0x03E9" ] }
+      ]
+    },
+    {
+      "service": "0x0065",
+      "instance": "0x0001",
+      "unicast": "172.31.0.18",
+      "unreliable": "16000",
+      "events": [
+        { "event": "0x03E9", "is_field": "true", "update-cycle": "0" }
+      ],
+      "eventgroups": [
+        { "eventgroup": "0x0142", "events": [ "0x03E9" ] }
+      ]
+    },
+    {
+      "service": "0x0066",
+      "instance": "0x0001",
+      "unicast": "172.31.0.18",
+      "unreliable": "16000",
+      "events": [
+        { "event": "0x03EA", "is_field": "true", "update-cycle": "0" }
+      ],
+      "eventgroups": [
+        { "eventgroup": "0x0143", "events": [ "0x03EA" ] }
+      ]
+    },
+    {
+      "service": "0x0067",
+      "instance": "0x0001",
+      "unicast": "172.31.0.18",
+      "unreliable": "16000",
+      "events": [
+        { "event": "0x03EB", "is_field": "true", "update-cycle": "0" }
+      ],
+      "eventgroups": [
+        { "eventgroup": "0x0144", "events": [ "0x03EB" ] }
+      ]
+    },
+    {
+      "service": "0x0068",
+      "instance": "0x0001",
+      "unicast": "172.31.0.18",
+      "unreliable": "16000",
+      "events": [
+        { "event": "0x03EC", "is_field": "true", "update-cycle": "0" }
+      ],
+      "eventgroups": [
+        { "eventgroup": "0x0145", "events": [ "0x03EC" ] }
+      ]
+    }
+  ],
+  "routing": "android_someip_client",
+  "service-discovery": {
+    "enable": "false"
+  }
+}
